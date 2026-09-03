@@ -183,7 +183,11 @@ const Form = () => {
         Application Form
       </h2>
 
-      {message && <p className="mb-5 text-center text-red-500 text-xl font-bold">{message}</p>}
+      {message && (
+        <p className="mb-5 text-center text-red-500 text-xl font-bold">
+          {message}
+        </p>
+      )}
 
       <form className="flex flex-col gap-10 md:gap-15" onSubmit={handleSubmit}>
         <div className="grid gap-5">
@@ -231,7 +235,7 @@ const Form = () => {
             </div>
 
             {/* Region */}
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <label className="font-medium">Region</label>
               <select
                 name="region"
@@ -247,14 +251,14 @@ const Form = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col gap-5 text-sm md:text-lg">
             {/* Heard Before */}
             <div className="flex flex-col gap-2">
               <label className="font-medium">
-                Have you heard about Genomics and Bioinformatics before?
+                How did you find out about GoGeneBio?
               </label>
               <select
                 name="heard_before"
@@ -264,16 +268,20 @@ const Form = () => {
                 required
               >
                 <option value="">Choose</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="whatsapp">WhatsApp/WhatsApp Group</option>
+                <option value="email">Email</option>
+                <option value="friend">Recommended by someone</option>
+                <option value="event">
+                  Other socials(Instagram,X,Facebook,etc)
+                </option>
+                <option value="other">Other</option>
               </select>
             </div>
 
             {/* Experience */}
             <div className="flex flex-col gap-2">
-              <label className="font-medium">
-                How would you rate your experience?
-              </label>
+              <label className="font-medium">What best describes you?</label>
               <select
                 name="experience"
                 value={formData.experience}
@@ -282,9 +290,14 @@ const Form = () => {
                 required
               >
                 <option value="">Choose</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
+                <option value="Undergraduate/Fresh Graduate">
+                  Undergraduate/Fresh Graduate
+                </option>
+                <option value="MSc/PhD student">MSc/PhD student</option>
+                <option value="Lecturer">Lecturer</option>
+                <option value="Industry Professional">Professional in the Industry</option>
+                <option value="Researcher">Freelance Researcher</option>
+                <option value="Others">Others</option>
               </select>
             </div>
           </div>

@@ -80,8 +80,8 @@ const Details = () => {
             Certification & Next Steps
           </h4>
           <p className="text-center text-sm mt-2">
-            Receive certificate on completion; guidance on continuing in
-            research or jobs.
+            Certificate would be given to all Interested participant but PS:
+            Terms and Conditions Apply.
           </p>
         </div>
       </div>
