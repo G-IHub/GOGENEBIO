@@ -7,137 +7,9 @@ const Form = () => {
     full_name: "",
     phone: "",
     email: "",
-    region: "",
     heard_before: "",
     experience: "",
   });
-
-  const regions = [
-    {
-      name: "Abuja - GWAGWALADA (Emmauel Ogechi)",
-      link: "https://chat.whatsapp.com/Gz7H9PstDKdLcYxN3yw4Zu",
-    },
-    {
-      name: "Abuja (Kolawole Nathaniel)",
-      link: "https://chat.whatsapp.com/IpzdTLTVCqYBR0DgmuPDAM",
-    },
-    {
-      name: "Abuja - Veritas University (Okwuchi Flora)",
-      link: "https://chat.whatsapp.com/Gafk8D32GrE0P6gEktE0mV",
-    },
-    {
-      name: "Ado-Ekiti - EKSUTH",
-      link: "https://chat.whatsapp.com/KmU8oIPkjWXD7fyxhmjkFZ",
-    },
-    {
-      name: "Bode-Saadu (Kwara)",
-      link: "https://chat.whatsapp.com/HrrYYIEaHRS0EFbf2yIWyK",
-    },
-    {
-      name: "Calabar (Paul Promise)",
-      link: "https://chat.whatsapp.com/HQVXqHxPRbsDvadFON3C6O",
-    },
-    {
-      name: "Delta",
-      link: "https://chat.whatsapp.com/GzJI9GS6pgA1d0nehhwAMU",
-    },
-    {
-      name: "Dutse (Ismail Abdulkadir)",
-      link: "https://chat.whatsapp.com/Et24mvLQyDGJRDg4dDFOhY",
-    },
-    {
-      name: "Ekiti",
-      link: "https://chat.whatsapp.com/Cglpzmmh6pbBTIryN4Ux6L",
-    },
-    {
-      name: "Ekpoma - AAU",
-      link: "https://chat.whatsapp.com/KEeoMIl1XMgDQaBBjdGV4U",
-    },
-    {
-      name: "Enugu (Ibrahim Kehinde)",
-      link: "https://chat.whatsapp.com/HrrYYIEaHRS0EFbf2yIWyK",
-    },
-    {
-      name: "Ibadan - Univeristy of Ibadan (Abdullahi Babatunde)",
-      link: "https://chat.whatsapp.com/CaKIwXXzKgiAMY7H6F9kbk",
-    },
-    {
-      name: "Ibadan (Oyeniyi Blessing)",
-      link: "https://chat.whatsapp.com/Jw7SDFw0bnN7qgC4jzhFBl",
-    },
-    {
-      name: "Jos - UNIJOS (Akanni Sherifdeen and Fancy Ishaku)",
-      link: "https://chat.whatsapp.com/Jkaz6VufPa2DtjFxrl509G",
-    },
-    {
-      name: "Lagos (Ashimolowo Agape)",
-      link: "https://chat.whatsapp.com/H6GOrIL4hY8DdWgRsrosBT",
-    },
-    {
-      name: "Lagos - UNILAG (John Chidozie)",
-      link: "https://chat.whatsapp.com/JbtE8Ct3pVgG3eGnGMCjfx",
-    },
-    {
-      name: "Los Baños - UP (Howard Gabriel)",
-      link: "https://chat.whatsapp.com/F64M5z1jE7VKCqRoBcCSv0",
-    },
-    {
-      name: "Nairobi (Vickor Masai)",
-      link: "https://chat.whatsapp.com/GzAmbYyem4a4eobOz603a6",
-    },
-    {
-      name: "Ndola (Taonga Kapira)",
-      link: "https://chat.whatsapp.com/EwoUnczJdHE0zM6vC2406s",
-    },
-    {
-      name: "Ogbomosho (Afolabi Sofiat)",
-      link: "https://chat.whatsapp.com/F25rCb10oRJ0CNBsyDwxOh",
-    },
-    {
-      name: "Ogbomosho (AMR Club LAUTECH)",
-      link: "https://chat.whatsapp.com/CkLORp3hpY9GpTZqbF8wKF",
-    },
-    {
-      name: "Ogun - FUNAAB (Faniyi Olakunle)",
-      link: "https://chat.whatsapp.com/BI8Zq2sTLoJGLOISIJzPJv",
-    },
-    {
-      name: "Ogun (Lugard Damilola)",
-      link: "https://chat.whatsapp.com/J0JOxIMtgamGFwDIFoZ7Nw",
-    },
-    {
-      name: "Osogbo - Fountain University (Nurudeen Noor-Al-Hudah)",
-      link: "https://chat.whatsapp.com/G4pvLWMxnXuDxZxOlljFrj",
-    },
-    {
-      name: "Pakistan (Dr. Yasir)",
-      link: "https://chat.whatsapp.com/LJJprHXAVXnE53VjgXtK0w",
-    },
-    {
-      name: "Port Harcourt (Dr. Blessing Odogwu)",
-      link: "https://chat.whatsapp.com/KE7KDrnhIQlGgPIiK9xG84",
-    },
-    {
-      name: "Sokoto - UDUS (Abdulbaki Alfa-Ibrahim)",
-      link: "https://chat.whatsapp.com/GAss9ow8IHg43MooW4aXwA",
-    },
-    {
-      name: "Sokoto (Ahmad AbdulKadir)",
-      link: "https://chat.whatsapp.com/G11txorkFUb1e9MQheryKx",
-    },
-    {
-      name: "TASUED (Adeyemi Omotayo)",
-      link: "https://chat.whatsapp.com/KfE1IOz4svD4xR4hMxEDEI",
-    },
-    {
-      name: "Taraba (Otoh Ene)",
-      link: "https://chat.whatsapp.com/Ic8SSFyxdIsGLkjqxaz1P8",
-    },
-    {
-      name: "Tunisia (Yosra Gabsi)",
-      link: "https://chat.whatsapp.com/Ef7AXBo1wxlLQNSthWZ3dh",
-    },
-  ];
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -166,15 +38,7 @@ const Form = () => {
       return;
     }
 
-    const selectedRegion = regions.find((r) => r.name === formData.region);
-
-    if (selectedRegion) {
-      window.location.href = selectedRegion.link;
-    } else {
-      setMessage("Saved, but region link not found.");
-    }
-
-    setLoading(false);
+    window.location.href = "https://app.zikorail.com/go/ZtVGzZ";
   };
 
   return (
@@ -233,25 +97,6 @@ const Form = () => {
                 placeholder="Type your mail"
               />
             </div>
-
-            {/* Region */}
-            {/* <div className="flex flex-col gap-2">
-              <label className="font-medium">Region</label>
-              <select
-                name="region"
-                className="border border-[#DFDFDFDF] p-2.5 rounded-lg focus:outline-none"
-                value={formData.region}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Choose your region</option>
-                {regions.map((region, index) => (
-                  <option key={index} value={region.name}>
-                    {region.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
           </div>
 
           <div className="flex flex-col gap-5 text-sm md:text-lg">
