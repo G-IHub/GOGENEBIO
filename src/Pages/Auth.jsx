@@ -12,25 +12,19 @@ const Auth = () => {
     setLoading(true);
     setMessage("");
 
-    // Log the email we're searching for
-    console.log("Searching for email:", email.trim().toLowerCase());
-
     try {
-      // Simple direct query
-      const { data, error } = await supabase
-        .from("registrations")
-        .select("*")
-        .eq("email", email.trim().toLowerCase());
-
-      // Log the full response
-      console.log("Supabase response:", { data, error });
+      // Existence check only — does not expose other registrants' data
+      const { data: found, error } = await supabase.rpc(
+        "registration_exists",
+        { check_email: email.trim().toLowerCase() }
+      );
 
       if (error) {
         setMessage("Database error: " + error.message);
         return;
       }
 
-      if (!data || data.length === 0) {
+      if (!found) {
         setMessage("Email not found. Please check and try again.");
         return;
       }
