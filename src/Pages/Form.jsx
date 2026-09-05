@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
 
@@ -7,12 +7,33 @@ const Form = () => {
     full_name: "",
     phone: "",
     email: "",
+    region: "",
     heard_before: "",
     experience: "",
   });
 
+  const [regions, setRegions] = useState([]);
+  const [regionsLoading, setRegionsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchRegions = async () => {
+      const { data, error } = await supabase
+        .from("regions")
+        .select("name, wa_link")
+        .eq("active", true)
+        .order("name");
+
+      if (!error && data) {
+        // Only offer regions that actually have a redirect link set.
+        setRegions(data.filter((r) => r.wa_link && r.wa_link.trim()));
+      }
+      setRegionsLoading(false);
+    };
+
+    fetchRegions();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,6 +44,13 @@ const Form = () => {
     event.preventDefault();
     setLoading(true);
     setMessage("");
+
+    const selectedRegion = regions.find((r) => r.name === formData.region);
+    if (!selectedRegion) {
+      setMessage("Please choose a valid region.");
+      setLoading(false);
+      return;
+    }
 
     const { error } = await supabase.from("registrations").insert([formData]);
 
@@ -38,7 +66,7 @@ const Form = () => {
       return;
     }
 
-    window.location.href = "https://app.zikorail.com/go/ZtVGzZ";
+    window.location.href = selectedRegion.wa_link;
   };
 
   return (
@@ -96,6 +124,33 @@ const Form = () => {
                 required
                 placeholder="Type your mail"
               />
+            </div>
+
+            {/* Region */}
+            <div className="flex flex-col gap-2">
+              <label className="font-medium">Which region are you registering from?</label>
+              <select
+                name="region"
+                value={formData.region}
+                onChange={handleChange}
+                className="border border-[#DFDFDFDF] p-2 rounded-lg"
+                required
+                disabled={regionsLoading}
+              >
+                <option value="">
+                  {regionsLoading ? "Loading regions..." : "Choose your region"}
+                </option>
+                {regions.map((r) => (
+                  <option key={r.name} value={r.name}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+              {!regionsLoading && regions.length === 0 && (
+                <span className="text-xs text-red-500">
+                  No regions are available right now. Please try again later.
+                </span>
+              )}
             </div>
           </div>
 
@@ -157,7 +212,7 @@ const Form = () => {
           <button
             className="bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-full p-2 px-2.5 md:p-2.5 md:px-4 text-[14px] md:text-[16px] text-white cursor-pointer"
             type="submit"
-            disabled={loading}
+            disabled={loading || regionsLoading || regions.length === 0}
           >
             {loading ? "Submitting..." : "Submit Application"}
           </button>

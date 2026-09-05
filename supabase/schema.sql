@@ -10,6 +10,7 @@ create table if not exists public.registrations (
   full_name text not null,
   phone text not null,
   email text not null,
+  region text,
   heard_before text,
   experience text,
   constraint registrations_email_unique unique (email),
@@ -93,3 +94,41 @@ $$;
 
 -- Allow anyone to call the function (it only ever returns true/false).
 grant execute on function public.registration_exists(text) to anon, authenticated;
+
+-- ============================================================
+-- regions  (per-region WhatsApp inbound links; see 003_regions.sql)
+-- ============================================================
+create table if not exists public.regions (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  name text not null unique,
+  wa_link text not null,
+  active boolean not null default true
+);
+
+alter table public.regions enable row level security;
+
+create policy "regions_select_public"
+  on public.regions
+  for select
+  to anon, authenticated
+  using (true);
+
+create policy "regions_admin_insert"
+  on public.regions
+  for insert
+  to authenticated
+  with check ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
+
+create policy "regions_admin_update"
+  on public.regions
+  for update
+  to authenticated
+  using ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' )
+  with check ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
+
+create policy "regions_admin_delete"
+  on public.regions
+  for delete
+  to authenticated
+  using ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
