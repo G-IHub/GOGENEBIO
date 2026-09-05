@@ -86,12 +86,9 @@ const Testimonial = () => {
         </p>
         <div className="grid gap-4">
           {promos.map((p) => (
-            <a
+            <div
               key={p.id}
-              href={p.link}
-              target="_blank"
-              rel="noreferrer"
-              className="block bg-white rounded-xl shadow hover:shadow-md transition overflow-hidden"
+              className="flex flex-col bg-white rounded-xl shadow overflow-hidden"
             >
               {p.image_url && (
                 <img
@@ -100,8 +97,18 @@ const Testimonial = () => {
                   className="w-full h-40 object-cover"
                 />
               )}
-              <p className="p-3 text-sm font-medium">{p.caption}</p>
-            </a>
+              <div className="p-3 flex flex-col gap-3 flex-1">
+                <p className="text-sm font-medium">{p.caption}</p>
+                <a
+                  href={p.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-auto text-center bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] text-white rounded-lg py-2 text-sm font-medium"
+                >
+                  Register Now
+                </a>
+              </div>
+            </div>
           ))}
         </div>
       </div>
