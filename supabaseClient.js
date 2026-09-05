@@ -1,24 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Get these from your Supabase project settings → API.
-// Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env locally and in the
-// Vercel project's Environment Variables (Production + Preview).
+// Supabase project settings → API.
+// Values come from .env.production (committed — the URL and publishable key are
+// public-safe and Vite inlines them into the browser bundle either way) or from
+// a local .env during development. See .env.example.
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error(
-    "[supabase] build-time env check",
-    "hasUrl=" + Boolean(supabaseUrl),
-    "hasKey=" + Boolean(supabaseKey),
-    "viteKeys=" +
-      Object.keys(import.meta.env)
-        .filter((k) => k.startsWith("VITE_"))
-        .join(",")
-  );
   throw new Error(
-    "Missing Supabase env vars [build 3]. Set VITE_SUPABASE_URL and " +
-      "VITE_SUPABASE_ANON_KEY in the Vercel project's Environment Variables."
+    "Missing Supabase env vars: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY."
   );
 }
 
