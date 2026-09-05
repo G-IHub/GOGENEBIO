@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const toLines = (text) =>
   (text || "")
     .replace(/\r\n/g, "\n")
-    .replace(/[​-‍﻿ ]/g, " ")
+    .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, " ")
     .split("\n")
     .map((line) => line.replace(/\s{2,}/g, " ").trim())
     .filter(Boolean);
