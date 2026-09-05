@@ -99,7 +99,7 @@ const Testimonial = () => {
                   <img
                     src={p.image_url}
                     alt={p.caption}
-                    className="w-full h-40 object-cover"
+                    className="w-full h-auto object-contain bg-gray-50"
                   />
                 )}
                 <div className="p-3 flex flex-col gap-2 flex-1">
@@ -147,7 +147,7 @@ const Testimonial = () => {
             <img
               src={p.image_url}
               alt={p.caption}
-              className="w-full h-48 object-cover rounded-t-2xl"
+              className="w-full h-auto object-contain rounded-t-2xl bg-gray-50"
             />
           )}
           <div className="p-5 space-y-4">

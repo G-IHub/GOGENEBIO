@@ -919,7 +919,7 @@ const AdminDashboard = () => {
                       <img
                         src={promo.image_url}
                         alt={promo.caption}
-                        className="w-full h-32 object-cover rounded"
+                        className="w-full h-auto object-contain rounded bg-gray-50"
                       />
                     )}
                     {editing ? (
