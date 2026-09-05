@@ -55,13 +55,7 @@ const Form = () => {
     const { error } = await supabase.from("registrations").insert([formData]);
 
     if (error) {
-      if (error.code === "23505") {
-        setMessage(
-          "You've already registered using this email or phone number."
-        );
-      } else {
-        setMessage("Something went wrong: " + error.message);
-      }
+      setMessage("Something went wrong: " + error.message);
       setLoading(false);
       return;
     }

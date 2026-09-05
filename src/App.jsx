@@ -2,6 +2,7 @@ import Home from "./Pages/Home.jsx";
 import Form from "./Pages/Form.jsx";
 import { Routes, Route } from "react-router-dom";
 import Auth from "./Pages/Auth.jsx";
+import Testimonial from "./Pages/Testimonial.jsx";
 import ClosedForm from "./Pages/ClosedForm.jsx";
 import AdminLogin from "./Pages/AdminLogin.jsx";
 import AdminDashboard from "./Pages/AdminDashboard.jsx";
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/form" element={<Form />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/testimonial" element={<Testimonial />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin"

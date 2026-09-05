@@ -12,16 +12,15 @@ create table if not exists public.registrations (
   email text not null,
   region text,
   heard_before text,
-  experience text,
-  constraint registrations_email_unique unique (email),
-  constraint registrations_phone_unique unique (phone)
+  experience text
+  -- Registration is intentionally open: the same person may register more than
+  -- once, so email/phone are not unique.
 );
 
 alter table public.registrations enable row level security;
 
--- Normalize email so "John@x.com" and "john@x.com" are treated as the same
--- registrant (the unique constraint above and registration_exists() below
--- both depend on emails being stored lowercase/trimmed).
+-- Normalize email so "John@x.com" and "john@x.com" match in registration_exists()
+-- below (which the certificate page uses) and in the admin search.
 create or replace function public.normalize_registration_email()
 returns trigger
 language plpgsql
@@ -58,6 +57,7 @@ create policy "registrations_select_admin"
 create table if not exists public.testimonials (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
+  name text,
   testimonial text not null
 );
 

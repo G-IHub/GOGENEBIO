@@ -32,6 +32,44 @@ const formatDate = (value) => {
   });
 };
 
+const csvCell = (value) => {
+  const s = value == null ? "" : String(value);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+};
+
+const downloadCsv = (filename, columns, rows) => {
+  const header = columns.map((c) => csvCell(c.label)).join(",");
+  const body = rows
+    .map((r) => columns.map((c) => csvCell(r[c.key])).join(","))
+    .join("\n");
+  const csv = header + "\n" + body;
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+const REGISTRATION_COLUMNS = [
+  { key: "full_name", label: "Full Name" },
+  { key: "email", label: "Email" },
+  { key: "phone", label: "Phone" },
+  { key: "region", label: "Region" },
+  { key: "heard_before", label: "Heard About Us" },
+  { key: "experience", label: "Experience" },
+  { key: "created_at", label: "Registered At" },
+];
+
+const TESTIMONIAL_COLUMNS = [
+  { key: "name", label: "Name" },
+  { key: "testimonial", label: "Testimonial" },
+  { key: "created_at", label: "Submitted At" },
+];
+
 const StatCard = ({ label, value }) => (
   <div className="bg-white rounded-lg shadow p-4">
     <p className="text-xs md:text-sm text-gray-500">{label}</p>
@@ -241,13 +279,28 @@ const AdminDashboard = () => {
         <p>Loading...</p>
       ) : activeTab === "registrations" ? (
         <div>
-          <input
-            type="text"
-            placeholder="Search by name, email, phone, or region..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border rounded-lg p-2 mb-4 w-full max-w-sm focus:outline-none bg-white"
-          />
+          <div className="flex flex-wrap gap-3 mb-4 items-center">
+            <input
+              type="text"
+              placeholder="Search by name, email, phone, or region..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="border rounded-lg p-2 w-full max-w-sm focus:outline-none bg-white"
+            />
+            <button
+              onClick={() =>
+                downloadCsv(
+                  `registrations-${new Date().toISOString().slice(0, 10)}.csv`,
+                  REGISTRATION_COLUMNS,
+                  filteredRegistrations
+                )
+              }
+              disabled={filteredRegistrations.length === 0}
+              className="border border-[#9D3CA7] text-[#9D3CA7] rounded-full px-4 py-2 text-sm cursor-pointer disabled:opacity-40"
+            >
+              Export CSV{search.trim() ? " (filtered)" : ""}
+            </button>
+          </div>
           <div className="overflow-x-auto bg-white rounded-lg shadow">
             <table className="w-full text-sm text-left">
               <thead className="bg-gray-100">
@@ -287,10 +340,27 @@ const AdminDashboard = () => {
           </div>
         </div>
       ) : activeTab === "testimonials" ? (
-        <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <div>
+          <div className="mb-4">
+            <button
+              onClick={() =>
+                downloadCsv(
+                  `testimonials-${new Date().toISOString().slice(0, 10)}.csv`,
+                  TESTIMONIAL_COLUMNS,
+                  testimonials
+                )
+              }
+              disabled={testimonials.length === 0}
+              className="border border-[#9D3CA7] text-[#9D3CA7] rounded-full px-4 py-2 text-sm cursor-pointer disabled:opacity-40"
+            >
+              Export CSV
+            </button>
+          </div>
+          <div className="overflow-x-auto bg-white rounded-lg shadow">
           <table className="w-full text-sm text-left">
             <thead className="bg-gray-100">
               <tr>
+                <th className="p-3">Name</th>
                 <th className="p-3">Testimonial</th>
                 <th className="p-3">Submitted</th>
               </tr>
@@ -298,6 +368,7 @@ const AdminDashboard = () => {
             <tbody>
               {testimonials.map((t, idx) => (
                 <tr key={t.id ?? idx} className="border-t align-top">
+                  <td className="p-3 whitespace-nowrap">{t.name || "-"}</td>
                   <td className="p-3">{t.testimonial}</td>
                   <td className="p-3 whitespace-nowrap">
                     {formatDate(t.created_at)}
@@ -306,13 +377,14 @@ const AdminDashboard = () => {
               ))}
               {testimonials.length === 0 && (
                 <tr>
-                  <td colSpan={2} className="p-3 text-center text-gray-500">
+                  <td colSpan={3} className="p-3 text-center text-gray-500">
                     No testimonials found.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+          </div>
         </div>
       ) : (
         <div>
