@@ -66,6 +66,9 @@ const REGISTRATION_COLUMNS = [
 
 const TESTIMONIAL_COLUMNS = [
   { key: "name", label: "Name" },
+  { key: "email", label: "Email" },
+  { key: "country", label: "Country" },
+  { key: "region", label: "Region" },
   { key: "testimonial", label: "Testimonial" },
   { key: "created_at", label: "Submitted At" },
 ];
@@ -361,6 +364,9 @@ const AdminDashboard = () => {
             <thead className="bg-gray-100">
               <tr>
                 <th className="p-3">Name</th>
+                <th className="p-3">Email</th>
+                <th className="p-3">Country</th>
+                <th className="p-3">Region</th>
                 <th className="p-3">Testimonial</th>
                 <th className="p-3">Submitted</th>
               </tr>
@@ -369,6 +375,9 @@ const AdminDashboard = () => {
               {testimonials.map((t, idx) => (
                 <tr key={t.id ?? idx} className="border-t align-top">
                   <td className="p-3 whitespace-nowrap">{t.name || "-"}</td>
+                  <td className="p-3 whitespace-nowrap">{t.email || "-"}</td>
+                  <td className="p-3 whitespace-nowrap">{t.country || "-"}</td>
+                  <td className="p-3 whitespace-nowrap">{t.region || "-"}</td>
                   <td className="p-3">{t.testimonial}</td>
                   <td className="p-3 whitespace-nowrap">
                     {formatDate(t.created_at)}
@@ -377,7 +386,7 @@ const AdminDashboard = () => {
               ))}
               {testimonials.length === 0 && (
                 <tr>
-                  <td colSpan={3} className="p-3 text-center text-gray-500">
+                  <td colSpan={6} className="p-3 text-center text-gray-500">
                     No testimonials found.
                   </td>
                 </tr>
