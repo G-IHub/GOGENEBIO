@@ -1,6 +1,68 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
+
+const ImageDrop = ({ file, imageUrl, onFile }) => {
+  const inputRef = useRef(null);
+  const [dragOver, setDragOver] = useState(false);
+
+  const preview = useMemo(
+    () => (file ? URL.createObjectURL(file) : imageUrl || null),
+    [file, imageUrl]
+  );
+  useEffect(() => {
+    return () => {
+      if (file && preview) URL.revokeObjectURL(preview);
+    };
+  }, [file, preview]);
+
+  const pick = (f) => {
+    if (f && f.type?.startsWith("image/")) onFile(f);
+  };
+
+  return (
+    <div
+      onClick={() => inputRef.current?.click()}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragOver(true);
+      }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragOver(false);
+        pick(e.dataTransfer.files?.[0]);
+      }}
+      className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition ${
+        dragOver ? "border-[#9D3CA7] bg-purple-50" : "border-gray-300"
+      }`}
+    >
+      {preview ? (
+        <img
+          src={preview}
+          alt=""
+          className="mx-auto max-h-32 rounded object-contain"
+        />
+      ) : (
+        <p className="text-sm text-gray-500">
+          Drag &amp; drop an image here, or click to browse
+        </p>
+      )}
+      {file && (
+        <p className="text-xs text-gray-500 mt-2 break-all">
+          {file.name} — click or drop to replace
+        </p>
+      )}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => pick(e.target.files?.[0])}
+      />
+    </div>
+  );
+};
 
 const TABS = [
   { key: "registrations", label: "Registrations" },
@@ -780,16 +842,9 @@ const AdminDashboard = () => {
               </div>
               <div className="flex flex-col gap-1 md:col-span-2">
                 <label className="text-xs text-gray-500">Image (optional)</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    setNewPromo((p) => ({
-                      ...p,
-                      file: e.target.files?.[0] || null,
-                    }))
-                  }
-                  className="text-sm"
+                <ImageDrop
+                  file={newPromo.file}
+                  onFile={(f) => setNewPromo((p) => ({ ...p, file: f }))}
                 />
               </div>
               <div className="md:col-span-2">
@@ -812,7 +867,7 @@ const AdminDashboard = () => {
                     key={promo.id}
                     className="bg-white rounded-lg shadow p-3 space-y-2"
                   >
-                    {promo.image_url && (
+                    {!editing && promo.image_url && (
                       <img
                         src={promo.image_url}
                         alt={promo.caption}
@@ -849,19 +904,15 @@ const AdminDashboard = () => {
                           }
                           className="border rounded p-2 w-full text-sm focus:outline-none"
                         />
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) =>
+                        <ImageDrop
+                          file={edit.file}
+                          imageUrl={promo.image_url}
+                          onFile={(f) =>
                             setPromoEdits((prev) => ({
                               ...prev,
-                              [promo.id]: {
-                                ...prev[promo.id],
-                                file: e.target.files?.[0] || null,
-                              },
+                              [promo.id]: { ...prev[promo.id], file: f },
                             }))
                           }
-                          className="text-xs"
                         />
                         <div className="flex gap-3 text-xs">
                           <button
