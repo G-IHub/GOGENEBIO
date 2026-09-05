@@ -12,6 +12,7 @@ const Testimonial = () => {
   });
   const [regions, setRegions] = useState([]);
   const [promos, setPromos] = useState([]);
+  const [openPromo, setOpenPromo] = useState(null);
   const [redirectUrl, setRedirectUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -85,34 +86,113 @@ const Testimonial = () => {
           Other programs and offers you might be interested in.
         </p>
         <div className="grid gap-4">
-          {promos.map((p) => (
-            <div
-              key={p.id}
-              className="flex flex-col bg-white rounded-xl shadow overflow-hidden"
-            >
-              {p.image_url && (
-                <img
-                  src={p.image_url}
-                  alt={p.caption}
-                  className="w-full h-40 object-cover"
-                />
-              )}
-              <div className="p-3 flex flex-col gap-3 flex-1">
-                <p className="text-sm font-medium">{p.caption}</p>
-                <a
-                  href={p.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-auto text-center bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] text-white rounded-lg py-2 text-sm font-medium"
-                >
-                  Register Now
-                </a>
+          {promos.map((p) => {
+            const hasDetails =
+              (p.description && p.description.trim()) ||
+              (p.benefits && p.benefits.length > 0);
+            return (
+              <div
+                key={p.id}
+                className="flex flex-col bg-white rounded-xl shadow overflow-hidden"
+              >
+                {p.image_url && (
+                  <img
+                    src={p.image_url}
+                    alt={p.caption}
+                    className="w-full h-40 object-cover"
+                  />
+                )}
+                <div className="p-3 flex flex-col gap-2 flex-1">
+                  <p className="text-sm font-medium">{p.caption}</p>
+                  <div className="mt-auto flex flex-col gap-2 pt-1">
+                    {hasDetails && (
+                      <button
+                        type="button"
+                        onClick={() => setOpenPromo(p)}
+                        className="text-center border border-[#9D3CA7] text-[#9D3CA7] rounded-lg py-2 text-sm font-medium"
+                      >
+                        See details
+                      </button>
+                    )}
+                    <a
+                      href={p.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-center bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] text-white rounded-lg py-2 text-sm font-medium"
+                    >
+                      Register Now
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     );
+
+  const PromoModal = () => {
+    if (!openPromo) return null;
+    const p = openPromo;
+    return (
+      <div
+        className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+        onClick={() => setOpenPromo(null)}
+      >
+        <div
+          className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {p.image_url && (
+            <img
+              src={p.image_url}
+              alt={p.caption}
+              className="w-full h-48 object-cover rounded-t-2xl"
+            />
+          )}
+          <div className="p-5 space-y-4">
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-lg font-bold">{p.caption}</h3>
+              <button
+                type="button"
+                onClick={() => setOpenPromo(null)}
+                className="text-gray-400 text-xl leading-none"
+                aria-label="Close"
+              >
+                ×
+              </button>
+            </div>
+
+            {p.description && p.description.trim() && (
+              <p className="text-sm text-gray-700 whitespace-pre-line">
+                {p.description}
+              </p>
+            )}
+
+            {p.benefits && p.benefits.length > 0 && (
+              <ul className="space-y-2">
+                {p.benefits.map((b, i) => (
+                  <li key={i} className="flex gap-2 text-sm text-gray-700">
+                    <span className="text-[#9D3CA7]">✓</span>
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <a
+              href={p.link}
+              target="_blank"
+              rel="noreferrer"
+              className="block text-center bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] text-white rounded-lg py-2.5 text-sm font-medium"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="md:h-screen md:overflow-hidden px-5 py-6 md:py-10">
@@ -239,6 +319,7 @@ const Testimonial = () => {
           <Promos />
         </div>
       </div>
+      <PromoModal />
     </div>
   );
 };

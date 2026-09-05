@@ -164,6 +164,8 @@ create table if not exists public.promos (
   created_at timestamptz not null default now(),
   image_url text,
   caption text not null,
+  description text,
+  benefits text[] not null default '{}',
   link text not null,
   active boolean not null default true,
   sort_order int not null default 0

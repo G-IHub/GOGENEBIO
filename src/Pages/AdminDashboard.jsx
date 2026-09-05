@@ -162,7 +162,13 @@ const AdminDashboard = () => {
   const [promos, setPromos] = useState([]);
   const [redirectUrl, setRedirectUrl] = useState("");
   const [redirectSaved, setRedirectSaved] = useState(true);
-  const [newPromo, setNewPromo] = useState({ caption: "", link: "", file: null });
+  const [newPromo, setNewPromo] = useState({
+    caption: "",
+    description: "",
+    benefits: "",
+    link: "",
+    file: null,
+  });
   const [promoEdits, setPromoEdits] = useState({});
   const [promoBusy, setPromoBusy] = useState(false);
 
@@ -244,6 +250,12 @@ const AdminDashboard = () => {
     return supabase.storage.from("promos").getPublicUrl(path).data.publicUrl;
   };
 
+  const linesToArray = (s) =>
+    (s || "")
+      .split("\n")
+      .map((x) => x.trim())
+      .filter(Boolean);
+
   const addPromo = async (e) => {
     e.preventDefault();
     if (!newPromo.caption.trim() || !newPromo.link.trim()) return;
@@ -255,13 +267,21 @@ const AdminDashboard = () => {
       const { error: insErr } = await supabase.from("promos").insert([
         {
           caption: newPromo.caption.trim(),
+          description: newPromo.description.trim() || null,
+          benefits: linesToArray(newPromo.benefits),
           link: newPromo.link.trim(),
           image_url,
           sort_order: promos.length,
         },
       ]);
       if (insErr) throw insErr;
-      setNewPromo({ caption: "", link: "", file: null });
+      setNewPromo({
+        caption: "",
+        description: "",
+        benefits: "",
+        link: "",
+        file: null,
+      });
       await fetchData();
     } catch (err) {
       setError(err.message || String(err));
@@ -277,6 +297,8 @@ const AdminDashboard = () => {
     try {
       const patch = {
         caption: edit.caption.trim(),
+        description: edit.description.trim() || null,
+        benefits: linesToArray(edit.benefits),
         link: edit.link.trim(),
       };
       if (edit.file) patch.image_url = await uploadPromoImage(edit.file);
@@ -841,6 +863,32 @@ const AdminDashboard = () => {
                 />
               </div>
               <div className="flex flex-col gap-1 md:col-span-2">
+                <label className="text-xs text-gray-500">
+                  Description (optional)
+                </label>
+                <textarea
+                  value={newPromo.description}
+                  onChange={(e) =>
+                    setNewPromo((p) => ({ ...p, description: e.target.value }))
+                  }
+                  placeholder="A short paragraph about the program"
+                  className="border rounded-lg p-2 h-20 focus:outline-none"
+                />
+              </div>
+              <div className="flex flex-col gap-1 md:col-span-2">
+                <label className="text-xs text-gray-500">
+                  Benefits (one per line, optional)
+                </label>
+                <textarea
+                  value={newPromo.benefits}
+                  onChange={(e) =>
+                    setNewPromo((p) => ({ ...p, benefits: e.target.value }))
+                  }
+                  placeholder={"Certificate of completion\nHands-on projects\n1:1 mentorship"}
+                  className="border rounded-lg p-2 h-24 focus:outline-none"
+                />
+              </div>
+              <div className="flex flex-col gap-1 md:col-span-2">
                 <label className="text-xs text-gray-500">Image (optional)</label>
                 <ImageDrop
                   file={newPromo.file}
@@ -904,6 +952,34 @@ const AdminDashboard = () => {
                           }
                           className="border rounded p-2 w-full text-sm focus:outline-none"
                         />
+                        <textarea
+                          value={edit.description}
+                          placeholder="Description"
+                          onChange={(e) =>
+                            setPromoEdits((prev) => ({
+                              ...prev,
+                              [promo.id]: {
+                                ...prev[promo.id],
+                                description: e.target.value,
+                              },
+                            }))
+                          }
+                          className="border rounded p-2 w-full text-sm h-16 focus:outline-none"
+                        />
+                        <textarea
+                          value={edit.benefits}
+                          placeholder="Benefits (one per line)"
+                          onChange={(e) =>
+                            setPromoEdits((prev) => ({
+                              ...prev,
+                              [promo.id]: {
+                                ...prev[promo.id],
+                                benefits: e.target.value,
+                              },
+                            }))
+                          }
+                          className="border rounded p-2 w-full text-sm h-20 focus:outline-none"
+                        />
                         <ImageDrop
                           file={edit.file}
                           imageUrl={promo.image_url}
@@ -955,6 +1031,8 @@ const AdminDashboard = () => {
                                 [promo.id]: {
                                   caption: promo.caption || "",
                                   link: promo.link || "",
+                                  description: promo.description || "",
+                                  benefits: (promo.benefits || []).join("\n"),
                                   file: null,
                                 },
                               }))
