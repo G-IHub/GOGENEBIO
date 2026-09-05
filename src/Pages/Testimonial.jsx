@@ -2,6 +2,16 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
 
+// Normalise whatever the admin typed into clean lines: strip zero-width /
+// non-breaking spaces, collapse repeated spaces, drop blank lines.
+const toLines = (text) =>
+  (text || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/[​-‍﻿ ]/g, " ")
+    .split("\n")
+    .map((line) => line.replace(/\s{2,}/g, " ").trim())
+    .filter(Boolean);
+
 const Testimonial = () => {
   const [form, setForm] = useState({
     name: "",
@@ -88,7 +98,7 @@ const Testimonial = () => {
         <div className="grid gap-4">
           {promos.map((p) => {
             const hasDetails =
-              (p.description && p.description.trim()) ||
+              toLines(p.description).length > 0 ||
               (p.benefits && p.benefits.length > 0);
             return (
               <div
@@ -131,24 +141,10 @@ const Testimonial = () => {
       </div>
     );
 
-  const toParagraphs = (text) =>
-    (text || "")
-      .replace(/\r\n/g, "\n")
-      .split(/\n{2,}/)
-      .map((block) =>
-        block
-          .split("\n")
-          .map((line) => line.trim())
-          .filter(Boolean)
-          .join(" ")
-          .replace(/\s{2,}/g, " ")
-      )
-      .filter(Boolean);
-
   const PromoModal = () => {
     if (!openPromo) return null;
     const p = openPromo;
-    const paragraphs = toParagraphs(p.description);
+    const lines = toLines(p.description);
     return (
       <div
         className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
@@ -178,16 +174,16 @@ const Testimonial = () => {
               </button>
             </div>
 
-            {paragraphs.length > 0 && (
+            {lines.length > 0 && (
               <>
                 <hr className="my-4 border-gray-200" />
-                <div className="space-y-3">
-                  {paragraphs.map((para, i) => (
+                <div className="space-y-2">
+                  {lines.map((line, i) => (
                     <p
                       key={i}
                       className="text-sm text-gray-700 leading-relaxed"
                     >
-                      {para}
+                      {line}
                     </p>
                   ))}
                 </div>
@@ -202,7 +198,10 @@ const Testimonial = () => {
                 </p>
                 <ul className="list-disc pl-5 space-y-1.5 marker:text-[#9D3CA7]">
                   {p.benefits.map((b, i) => (
-                    <li key={i} className="text-sm text-gray-700 leading-relaxed">
+                    <li
+                      key={i}
+                      className="text-sm text-gray-700 leading-relaxed"
+                    >
                       {b}
                     </li>
                   ))}
@@ -229,121 +228,121 @@ const Testimonial = () => {
     <div className="md:h-screen md:overflow-hidden px-5 py-6 md:py-10">
       <div className="w-full max-w-5xl mx-auto grid gap-8 md:grid-cols-[minmax(0,1fr)_320px] md:h-full md:min-h-0">
         <div className="md:overflow-y-auto md:min-h-0 md:pr-1">
-        <div className="bg-white rounded-2xl space-y-4 shadow-lg p-6">
-          {done ? (
-            <div className="space-y-3 text-center">
-              <h2 className="text-2xl font-bold">Thank you!</h2>
-              <p className="text-sm text-gray-600">
-                Your testimonial has been received.
-              </p>
-              <Link
-                to="/"
-                className="inline-block mt-2 text-sm text-[#9D3CA7] underline"
-              >
-                Back to Home
-              </Link>
-            </div>
-          ) : (
-            <>
-              <div className="space-y-2 text-center">
-                <h2 className="text-2xl font-bold">Share Your Testimonial</h2>
-                <p className="text-sm text-gray-500">
-                  Tell us about your experience with GoGeneBio
+          <div className="bg-white rounded-2xl space-y-4 shadow-lg p-6">
+            {done ? (
+              <div className="space-y-3 text-center">
+                <h2 className="text-2xl font-bold">Thank you!</h2>
+                <p className="text-sm text-gray-600">
+                  Your testimonial has been received.
                 </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                <label className="flex flex-col gap-2">
-                  <span className="font-medium text-sm">
-                    Your Name <span className="text-red-500">*</span>
-                  </span>
-                  <input
-                    type="text"
-                    name="name"
-                    className="w-full border rounded-lg p-3 focus:outline-none"
-                    placeholder="Full name"
-                    value={form.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-
-                <label className="flex flex-col gap-2">
-                  <span className="font-medium text-sm">
-                    Email <span className="text-red-500">*</span>
-                  </span>
-                  <input
-                    type="email"
-                    name="email"
-                    className="w-full border rounded-lg p-3 focus:outline-none"
-                    placeholder="you@example.com"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-
-                <label className="flex flex-col gap-2">
-                  <span className="font-medium text-sm">
-                    Country <span className="text-red-500">*</span>
-                  </span>
-                  <input
-                    type="text"
-                    name="country"
-                    className="w-full border rounded-lg p-3 focus:outline-none"
-                    placeholder="Country"
-                    value={form.country}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-
-                <label className="flex flex-col gap-2">
-                  <span className="font-medium text-sm">Region</span>
-                  <select
-                    name="region"
-                    className="w-full border rounded-lg p-3 focus:outline-none"
-                    value={form.region}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select region (optional)</option>
-                    {regions.map((r) => (
-                      <option key={r.name} value={r.name}>
-                        {r.name}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="flex flex-col gap-2">
-                  <span className="font-medium text-sm">
-                    Testimonial <span className="text-red-500">*</span>
-                  </span>
-                  <textarea
-                    name="testimonial"
-                    className="w-full border rounded-lg p-3 h-32 focus:outline-none"
-                    placeholder="Share your experience..."
-                    value={form.testimonial}
-                    onChange={handleChange}
-                    required
-                  />
-                </label>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white p-3 cursor-pointer"
+                <Link
+                  to="/"
+                  className="inline-block mt-2 text-sm text-[#9D3CA7] underline"
                 >
-                  {loading ? "Submitting..." : "Submit Testimonial"}
-                </button>
-              </form>
+                  Back to Home
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="space-y-2 text-center">
+                  <h2 className="text-2xl font-bold">Share Your Testimonial</h2>
+                  <p className="text-sm text-gray-500">
+                    Tell us about your experience with GoGeneBio
+                  </p>
+                </div>
 
-              {error && (
-                <p className="text-red-500 text-center text-sm">{error}</p>
-              )}
-            </>
-          )}
-        </div>
+                <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                  <label className="flex flex-col gap-2">
+                    <span className="font-medium text-sm">
+                      Your Name <span className="text-red-500">*</span>
+                    </span>
+                    <input
+                      type="text"
+                      name="name"
+                      className="w-full border rounded-lg p-3 focus:outline-none"
+                      placeholder="Full name"
+                      value={form.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-2">
+                    <span className="font-medium text-sm">
+                      Email <span className="text-red-500">*</span>
+                    </span>
+                    <input
+                      type="email"
+                      name="email"
+                      className="w-full border rounded-lg p-3 focus:outline-none"
+                      placeholder="you@example.com"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-2">
+                    <span className="font-medium text-sm">
+                      Country <span className="text-red-500">*</span>
+                    </span>
+                    <input
+                      type="text"
+                      name="country"
+                      className="w-full border rounded-lg p-3 focus:outline-none"
+                      placeholder="Country"
+                      value={form.country}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-2">
+                    <span className="font-medium text-sm">Region</span>
+                    <select
+                      name="region"
+                      className="w-full border rounded-lg p-3 focus:outline-none"
+                      value={form.region}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select region (optional)</option>
+                      {regions.map((r) => (
+                        <option key={r.name} value={r.name}>
+                          {r.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="flex flex-col gap-2">
+                    <span className="font-medium text-sm">
+                      Testimonial <span className="text-red-500">*</span>
+                    </span>
+                    <textarea
+                      name="testimonial"
+                      className="w-full border rounded-lg p-3 h-32 focus:outline-none"
+                      placeholder="Share your experience..."
+                      value={form.testimonial}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white p-3 cursor-pointer"
+                  >
+                    {loading ? "Submitting..." : "Submit Testimonial"}
+                  </button>
+                </form>
+
+                {error && (
+                  <p className="text-red-500 text-center text-sm">{error}</p>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         <div className="md:overflow-y-auto md:min-h-0 md:pt-2">

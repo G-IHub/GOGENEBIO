@@ -259,8 +259,9 @@ const AdminDashboard = () => {
   const cleanText = (s) =>
     (s || "")
       .replace(/\r\n/g, "\n")
+      .replace(/[​-‍﻿ ]/g, " ")
       .split("\n")
-      .map((l) => l.replace(/\s+$/, "").replace(/\s{2,}/g, " "))
+      .map((l) => l.replace(/\s+$/, "").replace(/\s{2,}/g, " ").trim())
       .join("\n")
       .replace(/\n{3,}/g, "\n\n")
       .trim();
