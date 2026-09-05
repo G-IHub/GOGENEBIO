@@ -17,7 +17,7 @@ const stats = [
 
 const SectionTwo = () => {
   return (
-    <div className="relative z-10 mx-4 md:mx-8 lg:mx-16 mt-6 lg:-mt-16">
+    <div className="relative z-10 mx-4 md:mx-8 lg:mx-16 mt-6 lg:-mt-12">
       <div className="bg-white border border-[#e6e1ef] rounded-2xl shadow-[0_30px_60px_-30px_rgba(50,20,80,0.35)] grid grid-cols-1 md:grid-cols-3">
         {stats.map((stat, index) => (
           <div
