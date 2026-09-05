@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+/* Landing-page type system (GOGeneBio home redesign) — additive only,
+   the rest of the app keeps the global Inter set in index.html. */
+@theme {
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-landing: "IBM Plex Sans", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, monospace;
+}

@@ -1,17 +1,23 @@
+import Header from "../Components/Header";
 import Hero from "../Components/Hero";
-import Features from "../Components/Features";
+import SectionTwo from "../Components/SectionTwo";
 import ProgramBenefits from "../Components/ProgramBenefits";
 import Details from "../Components/Details";
-import SectionTwo from "../Components/SectionTwo";
+import Testimonials from "../Components/Testimonials";
+import CTASection from "../Components/CTASection";
+import Footer from "../Components/Footer";
 
 const Home = () => {
   return (
     <div>
-      <Hero/>
+      <Header />
+      <Hero />
       <SectionTwo />
       <ProgramBenefits />
       <Details />
-      <Features />
+      <Testimonials />
+      <CTASection />
+      <Footer />
     </div>
   );
 };

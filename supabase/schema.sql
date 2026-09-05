@@ -204,3 +204,14 @@ create policy "promos_storage_admin_update"
 create policy "promos_storage_admin_delete"
   on storage.objects for delete to authenticated
   using ( bucket_id = 'promos' and lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
+
+-- ============================================================
+-- public_testimonials  (see 008_public_testimonials_view.sql)
+-- Lets the landing page show real testimonials without granting
+-- anonymous visitors full-table SELECT on testimonials.
+-- ============================================================
+create or replace view public.public_testimonials as
+select id, created_at, name, country, region, testimonial
+from public.testimonials;
+
+grant select on public.public_testimonials to anon, authenticated;

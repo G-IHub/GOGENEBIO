@@ -1,90 +1,63 @@
 import React from "react";
-import {
-  FaChalkboardTeacher,
-  FaProjectDiagram,
-  FaComments,
-  FaUsers,
-  FaCertificate,
-} from "react-icons/fa";
+
+const steps = [
+  {
+    n: "01",
+    title: "Core Global Sessions",
+    text: "Live online lectures from expert instructors, building up from first principles.",
+  },
+  {
+    n: "02",
+    title: "Hands-On Mini-Project",
+    text: "Apply what you learn to a real dataset — from raw data to annotated results.",
+  },
+  {
+    n: "03",
+    title: "Community & Mentorship",
+    text: "Live Q&A, peer WhatsApp/Telegram groups, plus onsite mentorship and local hubs where available.",
+  },
+  {
+    n: "04",
+    title: "Certification & Next Steps",
+    text: "Earn a certificate of participation, with early access to mentorship, fellowships, and Train-the-Trainer pathways.*",
+  },
+];
 
 const Details = () => {
   return (
-    <div className="p-5 md:p-10 lg:p-15 flex flex-col justify-center items-center">
-      <div className="flex bg-[#b241b7]/10 justify-between items-center p-2 px-4 rounded-3xl">
-        <p className="font-semibold text-sm text-[#b241b7]">
-          What you need to know about the Program
-        </p>
+    <div id="how-it-works" className="px-5 md:px-10 lg:px-16 py-16 md:py-20 bg-[#f5f3fa] scroll-mt-20">
+      <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-12 md:mb-16">
+        <div className="bg-white rounded-full px-4 py-1.5">
+          <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#3d168b]">
+            Program Format
+          </span>
+        </div>
+        <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+          How The Program Works
+        </h2>
       </div>
 
-      <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
-        {/* Core Global Sessions */}
-        <div className="col-span-1 p-6 md:p-8 lg:p-10 rounded-2xl bg-[#F1F4F9] border border-[#DFDFDFDF]">
-          <div className="flex justify-center mb-4">
-            <FaChalkboardTeacher className="text-[#4b0662] text-4xl" />
-          </div>
-          <h4 className="font-medium text-lg text-center">
-            Core Global Sessions
-          </h4>
-          <p className="text-center text-sm mt-2">
-            Online lectures from experts starting from the fundamentals.
-          </p>
-        </div>
+      <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+        <div className="hidden lg:block absolute top-[21px] left-[12.5%] right-[12.5%] h-px bg-[#e6e1ef]" />
 
-        {/* Hands-On Mini-Project */}
-        <div className="col-span-1 lg:col-span-2 p-6 md:p-8 lg:p-10 rounded-2xl bg-[#F1F4F9] border border-[#DFDFDFDF]">
-          <div className="flex justify-center mb-4">
-            <FaProjectDiagram className="text-[#66ff00]/50 text-4xl" />
+        {steps.map((step) => (
+          <div key={step.n} className="relative flex flex-col gap-4">
+            <div className="w-11 h-11 rounded-full bg-white border border-[#e6e1ef] flex items-center justify-center font-data font-semibold text-sm text-[#3d168b]">
+              {step.n}
+            </div>
+            <h4 className="font-display font-semibold text-base text-[#0f0f0f]">
+              {step.title}
+            </h4>
+            <p className="font-landing text-sm text-[#55506b] leading-relaxed">
+              {step.text}
+            </p>
           </div>
-          <h4 className="font-medium text-lg text-center">
-            Hands-On Mini-Project
-          </h4>
-          <p className="text-center text-sm mt-2">
-            Apply what you learn to a small real dataset: from raw data →
-            annotated results.
-          </p>
-        </div>
-
-        {/* Interactive Q&A & Discussion */}
-        <div className="col-span-1 p-6 md:p-8 lg:p-10 rounded-2xl bg-[#F1F4F9] border border-[#DFDFDFDF]">
-          <div className="flex justify-center mb-4">
-            <FaComments className="text-[#b241b7]/80 text-4xl" />
-          </div>
-          <h4 className="font-medium text-lg text-center">
-            Interactive Q&A & Discussion
-          </h4>
-          <p className="text-center text-sm mt-2">
-            Ask questions live or in local hubs; discuss challenges and
-            solutions.
-          </p>
-        </div>
-
-        {/* Peer & Mentor Support */}
-        <div className="col-span-1 p-6 md:p-8 lg:p-10 rounded-2xl bg-[#F1F4F9] border border-[#DFDFDFDF]">
-          <div className="flex justify-center mb-4">
-            <FaUsers className="text-orange-600/70 text-4xl" />
-          </div>
-          <h4 className="font-medium text-lg text-center">
-            Peer & Mentor Support
-          </h4>
-          <p className="text-center text-sm mt-2">
-            WhatsApp/Telegram group, local hosts, feedback on your work.
-          </p>
-        </div>
-
-        {/* Certification & Next Steps */}
-        <div className="col-span-1 p-6 md:p-8 lg:p-10 rounded-2xl bg-[#F1F4F9] border border-[#DFDFDFDF]">
-          <div className="flex justify-center mb-4">
-            <FaCertificate className="text-[#3d168b]/80 text-4xl" />
-          </div>
-          <h4 className="font-medium text-lg text-center">
-            Certification & Next Steps
-          </h4>
-          <p className="text-center text-sm mt-2">
-            Certificate would be given to all Interested participant but PS:
-            Terms and Conditions Apply.
-          </p>
-        </div>
+        ))}
       </div>
+
+      <p className="font-landing text-xs text-[#8a8598] mt-8 max-w-6xl mx-auto">
+        *Terms and conditions apply.
+      </p>
     </div>
   );
 };
