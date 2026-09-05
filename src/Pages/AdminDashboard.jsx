@@ -104,21 +104,38 @@ const AdminDashboard = () => {
     setRegionBusy(false);
   };
 
-  const saveRegionLink = async (id) => {
-    const link = (regionEdits[id] ?? "").trim();
-    if (!link) return;
-    setRegionBusy(true);
-    setError("");
-    const { error: updErr } = await supabase
-      .from("regions")
-      .update({ wa_link: link })
-      .eq("id", id);
-    if (updErr) setError(updErr.message);
+  const startRegionEdit = (region) => {
+    setRegionEdits((prev) => ({
+      ...prev,
+      [region.id]: { name: region.name || "", wa_link: region.wa_link || "" },
+    }));
+  };
+
+  const cancelRegionEdit = (id) => {
     setRegionEdits((prev) => {
       const next = { ...prev };
       delete next[id];
       return next;
     });
+  };
+
+  const saveRegion = async (id) => {
+    const edit = regionEdits[id];
+    if (!edit) return;
+    const name = edit.name.trim();
+    const wa_link = edit.wa_link.trim();
+    if (!name || !wa_link) {
+      setError("Region name and link are both required.");
+      return;
+    }
+    setRegionBusy(true);
+    setError("");
+    const { error: updErr } = await supabase
+      .from("regions")
+      .update({ name, wa_link })
+      .eq("id", id);
+    if (updErr) setError(updErr.message);
+    else cancelRegionEdit(id);
     await fetchData();
     setRegionBusy(false);
   };
@@ -351,39 +368,51 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {regions.map((region) => {
-                  const editing = regionEdits[region.id] !== undefined;
+                  const edit = regionEdits[region.id];
+                  const editing = edit !== undefined;
                   return (
                     <tr key={region.id} className="border-t align-top">
-                      <td className="p-3 font-medium whitespace-nowrap">
-                        {region.name}
-                      </td>
-                      <td className="p-3">
-                        <div className="flex flex-col md:flex-row gap-2 md:items-center">
+                      <td className="p-3 whitespace-nowrap">
+                        {editing ? (
                           <input
-                            type="url"
-                            value={
-                              editing
-                                ? regionEdits[region.id]
-                                : region.wa_link || ""
-                            }
+                            type="text"
+                            value={edit.name}
                             onChange={(e) =>
                               setRegionEdits((prev) => ({
                                 ...prev,
-                                [region.id]: e.target.value,
+                                [region.id]: {
+                                  ...prev[region.id],
+                                  name: e.target.value,
+                                },
+                              }))
+                            }
+                            className="border rounded-lg p-2 focus:outline-none w-40"
+                          />
+                        ) : (
+                          <span className="font-medium">{region.name}</span>
+                        )}
+                      </td>
+                      <td className="p-3">
+                        {editing ? (
+                          <input
+                            type="url"
+                            value={edit.wa_link}
+                            onChange={(e) =>
+                              setRegionEdits((prev) => ({
+                                ...prev,
+                                [region.id]: {
+                                  ...prev[region.id],
+                                  wa_link: e.target.value,
+                                },
                               }))
                             }
                             className="border rounded-lg p-2 focus:outline-none w-full md:w-96"
                           />
-                          {editing && (
-                            <button
-                              onClick={() => saveRegionLink(region.id)}
-                              disabled={regionBusy}
-                              className="text-[#9D3CA7] border border-[#9D3CA7] rounded-lg px-3 py-1 text-xs cursor-pointer whitespace-nowrap"
-                            >
-                              Save link
-                            </button>
-                          )}
-                        </div>
+                        ) : (
+                          <span className="break-all text-gray-600">
+                            {region.wa_link}
+                          </span>
+                        )}
                       </td>
                       <td className="p-3">
                         {stats.byRegion[region.name] || 0}
@@ -401,20 +430,48 @@ const AdminDashboard = () => {
                       </td>
                       <td className="p-3">
                         <div className="flex gap-3 whitespace-nowrap">
-                          <button
-                            onClick={() => toggleRegionActive(region)}
-                            disabled={regionBusy}
-                            className="text-xs underline cursor-pointer"
-                          >
-                            {region.active ? "Hide" : "Show"}
-                          </button>
-                          <button
-                            onClick={() => deleteRegion(region)}
-                            disabled={regionBusy}
-                            className="text-xs text-red-500 underline cursor-pointer"
-                          >
-                            Delete
-                          </button>
+                          {editing ? (
+                            <>
+                              <button
+                                onClick={() => saveRegion(region.id)}
+                                disabled={regionBusy}
+                                className="text-xs text-[#9D3CA7] underline cursor-pointer"
+                              >
+                                Save
+                              </button>
+                              <button
+                                onClick={() => cancelRegionEdit(region.id)}
+                                disabled={regionBusy}
+                                className="text-xs underline cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => startRegionEdit(region)}
+                                disabled={regionBusy}
+                                className="text-xs underline cursor-pointer"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => toggleRegionActive(region)}
+                                disabled={regionBusy}
+                                className="text-xs underline cursor-pointer"
+                              >
+                                {region.active ? "Hide" : "Show"}
+                              </button>
+                              <button
+                                onClick={() => deleteRegion(region)}
+                                disabled={regionBusy}
+                                className="text-xs text-red-500 underline cursor-pointer"
+                              >
+                                Delete
+                              </button>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
