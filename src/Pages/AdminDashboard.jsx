@@ -253,8 +253,17 @@ const AdminDashboard = () => {
   const linesToArray = (s) =>
     (s || "")
       .split("\n")
-      .map((x) => x.trim())
+      .map((x) => x.replace(/^[\s•\-*]+/, "").trim())
       .filter(Boolean);
+
+  const cleanText = (s) =>
+    (s || "")
+      .replace(/\r\n/g, "\n")
+      .split("\n")
+      .map((l) => l.replace(/\s+$/, "").replace(/\s{2,}/g, " "))
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
 
   const addPromo = async (e) => {
     e.preventDefault();
@@ -267,7 +276,7 @@ const AdminDashboard = () => {
       const { error: insErr } = await supabase.from("promos").insert([
         {
           caption: newPromo.caption.trim(),
-          description: newPromo.description.trim() || null,
+          description: cleanText(newPromo.description) || null,
           benefits: linesToArray(newPromo.benefits),
           link: newPromo.link.trim(),
           image_url,
@@ -297,7 +306,7 @@ const AdminDashboard = () => {
     try {
       const patch = {
         caption: edit.caption.trim(),
-        description: edit.description.trim() || null,
+        description: cleanText(edit.description) || null,
         benefits: linesToArray(edit.benefits),
         link: edit.link.trim(),
       };

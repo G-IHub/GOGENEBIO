@@ -131,9 +131,24 @@ const Testimonial = () => {
       </div>
     );
 
+  const toParagraphs = (text) =>
+    (text || "")
+      .replace(/\r\n/g, "\n")
+      .split(/\n{2,}/)
+      .map((block) =>
+        block
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean)
+          .join(" ")
+          .replace(/\s{2,}/g, " ")
+      )
+      .filter(Boolean);
+
   const PromoModal = () => {
     if (!openPromo) return null;
     const p = openPromo;
+    const paragraphs = toParagraphs(p.description);
     return (
       <div
         className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
@@ -150,36 +165,52 @@ const Testimonial = () => {
               className="w-full h-auto object-contain rounded-t-2xl bg-gray-50"
             />
           )}
-          <div className="p-5 space-y-4">
+          <div className="p-5">
             <div className="flex items-start justify-between gap-4">
-              <h3 className="text-lg font-bold">{p.caption}</h3>
+              <h3 className="text-lg font-bold leading-snug">{p.caption}</h3>
               <button
                 type="button"
                 onClick={() => setOpenPromo(null)}
-                className="text-gray-400 text-xl leading-none"
+                className="text-gray-400 text-2xl leading-none shrink-0"
                 aria-label="Close"
               >
                 ×
               </button>
             </div>
 
-            {p.description && p.description.trim() && (
-              <p className="text-sm text-gray-700 whitespace-pre-line">
-                {p.description}
-              </p>
+            {paragraphs.length > 0 && (
+              <>
+                <hr className="my-4 border-gray-200" />
+                <div className="space-y-3">
+                  {paragraphs.map((para, i) => (
+                    <p
+                      key={i}
+                      className="text-sm text-gray-700 leading-relaxed"
+                    >
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              </>
             )}
 
             {p.benefits && p.benefits.length > 0 && (
-              <ul className="space-y-2">
-                {p.benefits.map((b, i) => (
-                  <li key={i} className="flex gap-2 text-sm text-gray-700">
-                    <span className="text-[#9D3CA7]">✓</span>
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <hr className="my-4 border-gray-200" />
+                <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
+                  What you'll get
+                </p>
+                <ul className="list-disc pl-5 space-y-1.5 marker:text-[#9D3CA7]">
+                  {p.benefits.map((b, i) => (
+                    <li key={i} className="text-sm text-gray-700 leading-relaxed">
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
 
+            <hr className="my-4 border-gray-200" />
             <a
               href={p.link}
               target="_blank"
