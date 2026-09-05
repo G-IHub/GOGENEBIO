@@ -115,9 +115,10 @@ const Testimonial = () => {
     );
 
   return (
-    <div className="min-h-screen flex items-start justify-center px-5 py-10">
-      <div className="w-full max-w-5xl grid gap-8 md:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="bg-white rounded-2xl space-y-4 shadow-lg p-6 h-fit">
+    <div className="md:h-screen md:overflow-hidden px-5 py-6 md:py-10">
+      <div className="w-full max-w-5xl mx-auto grid gap-8 md:grid-cols-[minmax(0,1fr)_320px] md:h-full md:min-h-0">
+        <div className="md:overflow-y-auto md:min-h-0 md:pr-1">
+        <div className="bg-white rounded-2xl space-y-4 shadow-lg p-6">
           {done ? (
             <div className="space-y-3 text-center">
               <h2 className="text-2xl font-bold">Thank you!</h2>
@@ -232,8 +233,9 @@ const Testimonial = () => {
             </>
           )}
         </div>
+        </div>
 
-        <div className="md:pt-2">
+        <div className="md:overflow-y-auto md:min-h-0 md:pt-2">
           <Promos />
         </div>
       </div>
