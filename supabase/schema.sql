@@ -43,12 +43,13 @@ create policy "registrations_insert_anon"
   to anon, authenticated
   with check (true);
 
--- Only signed-in admins can read the list.
-create policy "registrations_select_authenticated"
+-- Only the admin email can read the list. Change/add emails here (and in the
+-- testimonials policy below) to grant dashboard access to more people.
+create policy "registrations_select_admin"
   on public.registrations
   for select
   to authenticated
-  using (true);
+  using ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
 
 -- ============================================================
 -- testimonials
@@ -67,11 +68,11 @@ create policy "testimonials_insert_anon"
   to anon, authenticated
   with check (true);
 
-create policy "testimonials_select_authenticated"
+create policy "testimonials_select_admin"
   on public.testimonials
   for select
   to authenticated
-  using (true);
+  using ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
 
 -- ============================================================
 -- registration_exists(check_email)
