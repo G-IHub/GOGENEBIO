@@ -6,6 +6,7 @@ const TABS = [
   { key: "registrations", label: "Registrations" },
   { key: "testimonials", label: "Testimonials" },
   { key: "regions", label: "Regions" },
+  { key: "testimonial_page", label: "Testimonial Page" },
 ];
 
 const sortByCreatedAt = (rows) =>
@@ -95,15 +96,31 @@ const AdminDashboard = () => {
   const [regionEdits, setRegionEdits] = useState({});
   const [regionBusy, setRegionBusy] = useState(false);
 
+  // Testimonial Page tab UI state
+  const [promos, setPromos] = useState([]);
+  const [redirectUrl, setRedirectUrl] = useState("");
+  const [redirectSaved, setRedirectSaved] = useState(true);
+  const [newPromo, setNewPromo] = useState({ caption: "", link: "", file: null });
+  const [promoEdits, setPromoEdits] = useState({});
+  const [promoBusy, setPromoBusy] = useState(false);
+
   const fetchData = async () => {
     setLoading(true);
     setError("");
 
-    const [regRes, testRes, regionRes] = await Promise.all([
-      supabase.from("registrations").select("*"),
-      supabase.from("testimonials").select("*"),
-      supabase.from("regions").select("*"),
-    ]);
+    const [regRes, testRes, regionRes, promoRes, settingRes] = await Promise.all(
+      [
+        supabase.from("registrations").select("*"),
+        supabase.from("testimonials").select("*"),
+        supabase.from("regions").select("*"),
+        supabase.from("promos").select("*"),
+        supabase
+          .from("app_settings")
+          .select("value")
+          .eq("key", "testimonial_redirect_url")
+          .maybeSingle(),
+      ]
+    );
 
     if (regRes.error) setError(regRes.error.message);
     else setRegistrations(sortByCreatedAt(regRes.data || []));
@@ -119,7 +136,128 @@ const AdminDashboard = () => {
         )
       );
 
+    if (promoRes.error) setError((prev) => prev || promoRes.error.message);
+    else
+      setPromos(
+        [...(promoRes.data || [])].sort(
+          (a, b) =>
+            (a.sort_order ?? 0) - (b.sort_order ?? 0) ||
+            new Date(a.created_at) - new Date(b.created_at)
+        )
+      );
+
+    if (!settingRes.error && settingRes.data) {
+      setRedirectUrl(settingRes.data.value || "");
+      setRedirectSaved(true);
+    }
+
     setLoading(false);
+  };
+
+  const saveRedirectUrl = async () => {
+    setPromoBusy(true);
+    setError("");
+    const { error: upErr } = await supabase
+      .from("app_settings")
+      .upsert(
+        {
+          key: "testimonial_redirect_url",
+          value: redirectUrl.trim(),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "key" }
+      );
+    if (upErr) setError(upErr.message);
+    else setRedirectSaved(true);
+    setPromoBusy(false);
+  };
+
+  const uploadPromoImage = async (file) => {
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("promos")
+      .upload(path, file, { upsert: false });
+    if (upErr) throw upErr;
+    return supabase.storage.from("promos").getPublicUrl(path).data.publicUrl;
+  };
+
+  const addPromo = async (e) => {
+    e.preventDefault();
+    if (!newPromo.caption.trim() || !newPromo.link.trim()) return;
+    setPromoBusy(true);
+    setError("");
+    try {
+      let image_url = null;
+      if (newPromo.file) image_url = await uploadPromoImage(newPromo.file);
+      const { error: insErr } = await supabase.from("promos").insert([
+        {
+          caption: newPromo.caption.trim(),
+          link: newPromo.link.trim(),
+          image_url,
+          sort_order: promos.length,
+        },
+      ]);
+      if (insErr) throw insErr;
+      setNewPromo({ caption: "", link: "", file: null });
+      await fetchData();
+    } catch (err) {
+      setError(err.message || String(err));
+    }
+    setPromoBusy(false);
+  };
+
+  const savePromo = async (id) => {
+    const edit = promoEdits[id];
+    if (!edit) return;
+    setPromoBusy(true);
+    setError("");
+    try {
+      const patch = {
+        caption: edit.caption.trim(),
+        link: edit.link.trim(),
+      };
+      if (edit.file) patch.image_url = await uploadPromoImage(edit.file);
+      const { error: upErr } = await supabase
+        .from("promos")
+        .update(patch)
+        .eq("id", id);
+      if (upErr) throw upErr;
+      setPromoEdits((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
+      await fetchData();
+    } catch (err) {
+      setError(err.message || String(err));
+    }
+    setPromoBusy(false);
+  };
+
+  const togglePromoActive = async (promo) => {
+    setPromoBusy(true);
+    setError("");
+    const { error: upErr } = await supabase
+      .from("promos")
+      .update({ active: !promo.active })
+      .eq("id", promo.id);
+    if (upErr) setError(upErr.message);
+    await fetchData();
+    setPromoBusy(false);
+  };
+
+  const deletePromo = async (promo) => {
+    if (!window.confirm("Delete this promo card?")) return;
+    setPromoBusy(true);
+    setError("");
+    const { error: delErr } = await supabase
+      .from("promos")
+      .delete()
+      .eq("id", promo.id);
+    if (delErr) setError(delErr.message);
+    await fetchData();
+    setPromoBusy(false);
   };
 
   useEffect(() => {
@@ -265,13 +403,14 @@ const AdminDashboard = () => {
                 : "border-transparent text-gray-500"
             }`}
           >
-            {tab.label} (
+            {tab.label}
             {tab.key === "registrations"
-              ? registrations.length
+              ? ` (${registrations.length})`
               : tab.key === "testimonials"
-              ? testimonials.length
-              : regions.length}
-            )
+              ? ` (${testimonials.length})`
+              : tab.key === "regions"
+              ? ` (${regions.length})`
+              : ""}
           </button>
         ))}
       </div>
@@ -395,7 +534,7 @@ const AdminDashboard = () => {
           </table>
           </div>
         </div>
-      ) : (
+      ) : activeTab === "regions" ? (
         <div>
           <form
             onSubmit={addRegion}
@@ -573,6 +712,236 @@ const AdminDashboard = () => {
             have a link. Applicants who pick a region are redirected to its link
             after registering.
           </p>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          <div className="bg-white rounded-lg shadow p-4">
+            <h3 className="font-semibold mb-1">After-submit redirect link</h3>
+            <p className="text-xs text-gray-500 mb-3">
+              Where people are sent right after submitting a testimonial (e.g.
+              their certificate page). Leave blank to just show a thank-you
+              message.
+            </p>
+            <div className="flex flex-col md:flex-row gap-3 md:items-center">
+              <input
+                type="url"
+                value={redirectUrl}
+                onChange={(e) => {
+                  setRedirectUrl(e.target.value);
+                  setRedirectSaved(false);
+                }}
+                placeholder="https://genomac-certificate-generator.vercel.app/..."
+                className="border rounded-lg p-2 focus:outline-none w-full md:max-w-xl"
+              />
+              <button
+                onClick={saveRedirectUrl}
+                disabled={promoBusy || redirectSaved}
+                className="bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white px-4 py-2 cursor-pointer disabled:opacity-40 whitespace-nowrap"
+              >
+                {redirectSaved ? "Saved" : "Save link"}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="font-semibold mb-1">Program / offer cards</h3>
+            <p className="text-xs text-gray-500 mb-4">
+              Shown next to the testimonial form. Only <strong>Active</strong>{" "}
+              cards appear.
+            </p>
+
+            <form
+              onSubmit={addPromo}
+              className="bg-white rounded-lg shadow p-4 mb-6 grid gap-3 md:grid-cols-2"
+            >
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Caption</label>
+                <input
+                  type="text"
+                  value={newPromo.caption}
+                  onChange={(e) =>
+                    setNewPromo((p) => ({ ...p, caption: e.target.value }))
+                  }
+                  placeholder="Premium Bioinformatics Program"
+                  className="border rounded-lg p-2 focus:outline-none"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Link</label>
+                <input
+                  type="url"
+                  value={newPromo.link}
+                  onChange={(e) =>
+                    setNewPromo((p) => ({ ...p, link: e.target.value }))
+                  }
+                  placeholder="https://..."
+                  className="border rounded-lg p-2 focus:outline-none"
+                />
+              </div>
+              <div className="flex flex-col gap-1 md:col-span-2">
+                <label className="text-xs text-gray-500">Image (optional)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setNewPromo((p) => ({
+                      ...p,
+                      file: e.target.files?.[0] || null,
+                    }))
+                  }
+                  className="text-sm"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <button
+                  type="submit"
+                  disabled={promoBusy}
+                  className="bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white px-4 py-2 cursor-pointer disabled:opacity-40"
+                >
+                  {promoBusy ? "Working..." : "Add card"}
+                </button>
+              </div>
+            </form>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {promos.map((promo) => {
+                const edit = promoEdits[promo.id];
+                const editing = edit !== undefined;
+                return (
+                  <div
+                    key={promo.id}
+                    className="bg-white rounded-lg shadow p-3 space-y-2"
+                  >
+                    {promo.image_url && (
+                      <img
+                        src={promo.image_url}
+                        alt={promo.caption}
+                        className="w-full h-32 object-cover rounded"
+                      />
+                    )}
+                    {editing ? (
+                      <>
+                        <input
+                          type="text"
+                          value={edit.caption}
+                          onChange={(e) =>
+                            setPromoEdits((prev) => ({
+                              ...prev,
+                              [promo.id]: {
+                                ...prev[promo.id],
+                                caption: e.target.value,
+                              },
+                            }))
+                          }
+                          className="border rounded p-2 w-full text-sm focus:outline-none"
+                        />
+                        <input
+                          type="url"
+                          value={edit.link}
+                          onChange={(e) =>
+                            setPromoEdits((prev) => ({
+                              ...prev,
+                              [promo.id]: {
+                                ...prev[promo.id],
+                                link: e.target.value,
+                              },
+                            }))
+                          }
+                          className="border rounded p-2 w-full text-sm focus:outline-none"
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) =>
+                            setPromoEdits((prev) => ({
+                              ...prev,
+                              [promo.id]: {
+                                ...prev[promo.id],
+                                file: e.target.files?.[0] || null,
+                              },
+                            }))
+                          }
+                          className="text-xs"
+                        />
+                        <div className="flex gap-3 text-xs">
+                          <button
+                            onClick={() => savePromo(promo.id)}
+                            disabled={promoBusy}
+                            className="text-[#9D3CA7] underline cursor-pointer"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() =>
+                              setPromoEdits((prev) => {
+                                const n = { ...prev };
+                                delete n[promo.id];
+                                return n;
+                              })
+                            }
+                            className="underline cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-sm font-medium">{promo.caption}</p>
+                        <a
+                          href={promo.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs text-[#9D3CA7] underline break-all"
+                        >
+                          {promo.link}
+                        </a>
+                        <div className="flex gap-3 text-xs pt-1">
+                          <button
+                            onClick={() =>
+                              setPromoEdits((prev) => ({
+                                ...prev,
+                                [promo.id]: {
+                                  caption: promo.caption || "",
+                                  link: promo.link || "",
+                                  file: null,
+                                },
+                              }))
+                            }
+                            className="underline cursor-pointer"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => togglePromoActive(promo)}
+                            disabled={promoBusy}
+                            className="underline cursor-pointer"
+                          >
+                            {promo.active ? "Hide" : "Show"}
+                          </button>
+                          <button
+                            onClick={() => deletePromo(promo)}
+                            disabled={promoBusy}
+                            className="text-red-500 underline cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                        {!promo.active && (
+                          <span className="text-[10px] text-gray-400">
+                            Hidden
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+              {promos.length === 0 && (
+                <p className="text-sm text-gray-500">No cards yet.</p>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
