@@ -266,11 +266,11 @@ const Hub = () => {
         <div className="relative flex flex-col lg:flex-row lg:items-center lg:gap-12 max-w-6xl">
           <div className="lg:w-7/12">
             <Eyebrow>Global Outreach</Eyebrow>
-            <h1 className="font-display font-bold text-3xl md:text-5xl leading-tight mt-5">
+            <h1 className="font-display font-bold text-[26px] md:text-5xl leading-tight mt-5">
               Bringing genomics &amp; bioinformatics to{" "}
               <span className="text-[#7ed003]">communities everywhere</span>
             </h1>
-            <p className="font-landing text-sm md:text-lg text-[#4f4f4f] mt-5 leading-relaxed max-w-2xl">
+            <p className="font-landing text-[13px] md:text-lg text-[#4f4f4f] mt-5 leading-relaxed max-w-2xl">
               {/* PLACEHOLDER — replace with the real mission statement. */}
               The Global Outreach is a Genomac Holdings initiative running a
               growing family of programs that make genomics and bioinformatics
@@ -309,7 +309,7 @@ const Hub = () => {
                   : ""
               }`}
             >
-              <span className="font-data font-semibold text-3xl text-[#3d168b]">
+              <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
                 {stat.value}
               </span>
               <span className="font-landing text-[13.5px] text-[#55506b] leading-relaxed">
@@ -327,10 +327,10 @@ const Hub = () => {
       >
         <div className="rounded-3xl border border-[#e0cff2] bg-[#f5eefb] p-7 md:p-12">
           <Eyebrow>About</Eyebrow>
-          <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+          <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
             One initiative, many ways in
           </h2>
-          <div className="font-landing text-sm md:text-base text-[#55506b] leading-relaxed mt-4 space-y-4">
+          <div className="font-landing text-[13px] md:text-base text-[#55506b] leading-relaxed mt-4 space-y-4">
             {/* PLACEHOLDER — replace with real about copy. */}
             <p>
               Genomics and bioinformatics are reshaping health, agriculture, and
@@ -349,15 +349,17 @@ const Hub = () => {
             {reasons.map((r) => (
               <div
                 key={r.title}
-                className="bg-white border border-[#e0cff2] rounded-2xl p-6 flex flex-col gap-3"
+                className="bg-white border border-[#e0cff2] rounded-2xl p-5 flex flex-col gap-2.5"
               >
-                <div className="w-10 h-10 rounded-xl bg-[#b241b71a] flex items-center justify-center">
-                  {r.icon}
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#b241b71a] flex items-center justify-center shrink-0">
+                    {r.icon}
+                  </div>
+                  <h3 className="font-display font-semibold text-[13.5px] text-[#0f0f0f] leading-snug">
+                    {r.title}
+                  </h3>
                 </div>
-                <h3 className="font-display font-semibold text-[15px] text-[#0f0f0f] leading-snug">
-                  {r.title}
-                </h3>
-                <p className="font-landing text-[13.5px] text-[#55506b] leading-relaxed">
+                <p className="font-landing text-xs text-[#55506b] leading-relaxed">
                   {r.text}
                 </p>
               </div>
@@ -377,10 +379,10 @@ const Hub = () => {
               Our Approach
             </span>
           </div>
-          <h2 className="font-display font-bold text-2xl md:text-4xl mt-4">
+          <h2 className="font-display font-bold text-xl md:text-4xl mt-4">
             What Makes Our Outreach Different?
           </h2>
-          <p className="font-landing text-sm md:text-lg text-[#e6ddf5] leading-relaxed mt-5 max-w-3xl">
+          <p className="font-landing text-[13px] md:text-lg text-[#e6ddf5] leading-relaxed mt-5 max-w-3xl">
             We don&apos;t just tell people about science —{" "}
             <span className="text-[#a3e635] font-semibold">
               we let them experience it
@@ -409,14 +411,14 @@ const Hub = () => {
                 >
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
-                <span className="font-landing text-sm md:text-[15px] text-white">
+                <span className="font-landing text-[13px] md:text-[15px] text-white">
                   {item}
                 </span>
               </div>
             ))}
           </div>
 
-          <p className="font-display font-bold text-xl md:text-2xl mt-12">
+          <p className="font-display font-bold text-lg md:text-2xl mt-12">
             The event is not the destination.{" "}
             <span className="text-[#a3e635]">It is the beginning.</span>
           </p>
@@ -430,7 +432,7 @@ const Hub = () => {
       >
         <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-12">
           <Eyebrow>Programs</Eyebrow>
-          <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+          <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
             Programs under the Outreach
           </h2>
         </div>
@@ -450,7 +452,7 @@ const Hub = () => {
               >
                 {p.tag}
               </span>
-              <h3 className="font-display font-bold text-lg text-[#0f0f0f]">
+              <h3 className="font-display font-bold text-base md:text-lg text-[#0f0f0f]">
                 {p.name}
               </h3>
               <p className="font-landing text-sm text-[#55506b] leading-relaxed flex-1">
@@ -480,7 +482,7 @@ const Hub = () => {
       >
         <div className="max-w-6xl mx-auto">
           <Eyebrow>Track Record</Eyebrow>
-          <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+          <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
             Proven across regions
           </h2>
 
@@ -491,26 +493,26 @@ const Hub = () => {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 mt-4">
               <div className="py-4 sm:py-1 sm:pr-6 border-b sm:border-b-0 border-[#e0cff2]">
-                <span className="font-data font-semibold text-3xl text-[#3d168b]">
+                <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
                   {lastOutreach.participants}
                 </span>
-                <p className="font-landing text-[13.5px] text-[#55506b] mt-1">
+                <p className="font-landing text-xs text-[#55506b] mt-1">
                   participants
                 </p>
               </div>
               <div className="py-4 sm:py-1 sm:px-6 border-b sm:border-b-0 sm:border-l border-[#e0cff2]">
-                <span className="font-data font-semibold text-3xl text-[#3d168b]">
+                <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
                   {lastOutreach.countries.length}
                 </span>
-                <p className="font-landing text-[13.5px] text-[#55506b] mt-1">
+                <p className="font-landing text-xs text-[#55506b] mt-1">
                   countries
                 </p>
               </div>
               <div className="py-4 sm:py-1 sm:pl-6 sm:border-l border-[#e0cff2]">
-                <span className="font-data font-semibold text-3xl text-[#3d168b]">
+                <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
                   {lastOutreach.rating}
                 </span>
-                <p className="font-landing text-[13.5px] text-[#55506b] mt-1">
+                <p className="font-landing text-xs text-[#55506b] mt-1">
                   average rating ({lastOutreach.responses} responses)
                 </p>
               </div>
@@ -533,7 +535,7 @@ const Hub = () => {
 
           {/* Where we've worked */}
           <div className="mt-10">
-            <h3 className="font-display font-semibold text-lg text-[#0f0f0f]">
+            <h3 className="font-display font-semibold text-base md:text-lg text-[#0f0f0f]">
               Where we&apos;ve worked
             </h3>
             <p className="font-landing text-sm text-[#55506b] mt-2 max-w-2xl">
@@ -559,7 +561,7 @@ const Hub = () => {
         {/* In their words — auto-sliding */}
         <div className="mt-14">
           <div className="max-w-6xl mx-auto">
-            <h3 className="font-display font-semibold text-lg text-[#0f0f0f]">
+            <h3 className="font-display font-semibold text-base md:text-lg text-[#0f0f0f]">
               In their words
             </h3>
             <p className="font-landing text-sm text-[#55506b] mt-1">
@@ -619,7 +621,7 @@ const Hub = () => {
           <h2 className="relative font-display font-bold text-xl md:text-3xl text-white max-w-xl">
             Bring the Outreach to your community
           </h2>
-          <p className="relative font-landing text-sm md:text-base text-[#f3e9f7] max-w-md">
+          <p className="relative font-landing text-[13px] md:text-base text-[#f3e9f7] max-w-md">
             Universities, schools, labs and community organisations can host a
             program in their region. Tell us about yours.
           </p>
