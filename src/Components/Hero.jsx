@@ -15,7 +15,7 @@ const Hero = () => {
           <TbCircleArrowDownFilled className="text-[#b241b7] text-lg animate-bounce" />
         </div>
         <div>
-          <h1 className="font-display font-bold text-3xl lg:text-5xl leading-tight">
+          <h1 className="font-display font-bold text-[26px] lg:text-5xl leading-tight">
             Learn{" "}
             <span className="text-[#7ed003]">Bioinformatics & Genomics</span>{" "}
             From Scratch — No Experience Needed
@@ -27,7 +27,7 @@ const Hero = () => {
           </p>
         </div>
         <Link to="/form">
-          <button className="font-landing w-full lg:w-1/4 text-white py-2 px-3 font-medium bg-linear-to-r from-[#b241b7] to-[#3d168b] rounded-full hover:bg-gradient-to-l hover:from-[#3d168b] hover:to-[#b241b7] cursor-pointer hover:translate-x-2 transition duration-300 text-sm mt-2">
+          <button className="font-landing w-full lg:w-1/4 text-white py-2 px-3 font-medium bg-linear-to-r from-[#b241b7] to-[#3d168b] rounded-full hover:bg-gradient-to-l hover:from-[#3d168b] hover:to-[#b241b7] cursor-pointer hover:translate-x-2 transition duration-300 text-[13px] mt-2">
             Register Now &rarr;
           </button>
         </Link>

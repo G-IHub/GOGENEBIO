@@ -32,7 +32,7 @@ const Details = () => {
             Program Format
           </span>
         </div>
-        <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+        <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
           How The Program Works
         </h2>
       </div>
@@ -44,10 +44,10 @@ const Details = () => {
               <div className="w-10 h-10 rounded-full bg-[#b241b71a] flex items-center justify-center font-data font-semibold text-sm text-[#3d168b]">
                 {step.n}
               </div>
-              <h4 className="font-display font-semibold text-base text-[#0f0f0f]">
+              <h4 className="font-display font-semibold text-sm md:text-base text-[#0f0f0f]">
                 {step.title}
               </h4>
-              <p className="font-landing text-sm text-[#55506b] leading-relaxed">
+              <p className="font-landing text-[13px] text-[#55506b] leading-relaxed">
                 {step.text}
               </p>
             </div>

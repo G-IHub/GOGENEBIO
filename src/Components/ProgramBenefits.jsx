@@ -67,10 +67,10 @@ const ProgramBenefits = () => {
             Curriculum
           </span>
         </div>
-        <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+        <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
           What You'll Learn
         </h2>
-        <p className="font-landing text-sm md:text-base text-[#55506b] mt-2">
+        <p className="font-landing text-[13px] md:text-base text-[#55506b] mt-2">
           By the end of the program, you'll be able to:
         </p>
       </div>
@@ -84,7 +84,7 @@ const ProgramBenefits = () => {
             <div className="w-10 h-10 rounded-xl bg-[#b241b71a] flex items-center justify-center">
               {item.icon}
             </div>
-            <p className="font-landing text-sm md:text-[15px] text-[#3f3a52] leading-relaxed">
+            <p className="font-landing text-[13px] md:text-[15px] text-[#3f3a52] leading-relaxed">
               {item.text}
             </p>
           </div>

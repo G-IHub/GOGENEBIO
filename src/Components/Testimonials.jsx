@@ -39,7 +39,7 @@ const Testimonials = () => {
             From Our Community
           </span>
         </div>
-        <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+        <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
           What Past Participants Say
         </h2>
       </div>
@@ -51,7 +51,7 @@ const Testimonials = () => {
             className="bg-white border border-[#e6e1ef] rounded-2xl p-7 flex flex-col gap-5 hover:shadow-lg hover:-translate-y-1 transition duration-300"
           >
             <QuoteIcon />
-            <p className="font-landing text-sm text-[#3f3a52] leading-relaxed flex-1">
+            <p className="font-landing text-[13px] text-[#3f3a52] leading-relaxed flex-1">
               {t.testimonial}
             </p>
             <div className="flex items-center gap-3 pt-1.5 border-t border-[#e6e1ef]">

@@ -19,18 +19,18 @@ const Footer = () => {
           <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#8a8598]">
             Program
           </span>
-          <a href="#curriculum" className="font-landing text-sm text-[#4f4f4f] hover:text-[#b241b7]">Curriculum</a>
-          <a href="#how-it-works" className="font-landing text-sm text-[#4f4f4f] hover:text-[#b241b7]">How It Works</a>
-          <a href="#testimonials" className="font-landing text-sm text-[#4f4f4f] hover:text-[#b241b7]">Testimonials</a>
+          <a href="#curriculum" className="font-landing text-[13px] text-[#4f4f4f] hover:text-[#b241b7]">Curriculum</a>
+          <a href="#how-it-works" className="font-landing text-[13px] text-[#4f4f4f] hover:text-[#b241b7]">How It Works</a>
+          <a href="#testimonials" className="font-landing text-[13px] text-[#4f4f4f] hover:text-[#b241b7]">Testimonials</a>
         </div>
 
         <div className="flex flex-col gap-3">
           <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#8a8598]">
             Connect
           </span>
-          <span className="font-landing text-sm text-[#4f4f4f]">[Instagram]</span>
-          <span className="font-landing text-sm text-[#4f4f4f]">[LinkedIn]</span>
-          <span className="font-landing text-sm text-[#4f4f4f]">[WhatsApp Community]</span>
+          <span className="font-landing text-[13px] text-[#4f4f4f]">[Instagram]</span>
+          <span className="font-landing text-[13px] text-[#4f4f4f]">[LinkedIn]</span>
+          <span className="font-landing text-[13px] text-[#4f4f4f]">[WhatsApp Community]</span>
         </div>
       </div>
       <div className="py-5 border-t border-[#e6e1ef]">

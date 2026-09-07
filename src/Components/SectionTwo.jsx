@@ -28,10 +28,10 @@ const SectionTwo = () => {
                 : ""
             }`}
           >
-            <span className="font-data font-semibold text-3xl text-[#3d168b]">
+            <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
               {stat.value}
             </span>
-            <span className="font-landing text-[13.5px] text-[#55506b] leading-relaxed">
+            <span className="font-landing text-xs md:text-[13.5px] text-[#55506b] leading-relaxed">
               {stat.label}
             </span>
           </div>
