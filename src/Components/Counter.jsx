@@ -33,7 +33,12 @@ const Counter = ({ value, className = "", duration = 1200 }) => {
   );
 
   useEffect(() => {
-    if (!parsed || reduced() || typeof IntersectionObserver === "undefined") {
+    if (
+      !parsed ||
+      reduced() ||
+      typeof IntersectionObserver === "undefined" ||
+      (typeof document !== "undefined" && document.visibilityState === "hidden")
+    ) {
       setDisplay(value);
       return;
     }

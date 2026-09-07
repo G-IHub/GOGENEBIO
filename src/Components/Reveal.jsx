@@ -15,7 +15,11 @@ const Reveal = ({ children, className = "", delay = 0 }) => {
   const [shown, setShown] = useState(false);
 
   useEffect(() => {
-    if (prefersReducedMotion() || typeof IntersectionObserver === "undefined") {
+    if (
+      prefersReducedMotion() ||
+      typeof IntersectionObserver === "undefined" ||
+      (typeof document !== "undefined" && document.visibilityState === "hidden")
+    ) {
       setShown(true);
       return;
     }
