@@ -92,8 +92,21 @@ const Hub = () => {
       <HubHeader />
 
       {/* Hero */}
-      <div className="px-5 md:px-10 lg:px-16 pt-12 md:pt-20 pb-16 md:pb-24 bg-[#F7F7F7]">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12 max-w-6xl">
+      <div className="relative overflow-hidden px-5 md:px-10 lg:px-16 pt-12 md:pt-20 pb-16 md:pb-24 bg-[#F7F7F7]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(61,22,139,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(61,22,139,0.06) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+            maskImage:
+              "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+          }}
+        />
+        <div className="relative flex flex-col lg:flex-row lg:items-center lg:gap-12 max-w-6xl">
           <div className="lg:w-7/12">
             <Eyebrow>Global Outreach</Eyebrow>
             <h1 className="font-display font-bold text-3xl md:text-5xl leading-tight mt-5">
