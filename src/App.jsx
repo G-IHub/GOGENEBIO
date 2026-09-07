@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import ScrollManager from "./Components/ScrollManager.jsx";
 import Hub from "./Pages/Hub.jsx";
 import Host from "./Pages/Host.jsx";
 import GoGeneBio from "./Pages/GoGeneBio.jsx";
@@ -13,6 +14,7 @@ import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 const App = () => {
   return (
     <div className="">
+      <ScrollManager />
       <Routes>
         <Route path="/" element={<Hub />} />
         <Route path="/host" element={<Host />} />
