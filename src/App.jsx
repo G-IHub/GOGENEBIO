@@ -1,4 +1,6 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Hub from "./Pages/Hub.jsx";
+import Host from "./Pages/Host.jsx";
 import GoGeneBio from "./Pages/GoGeneBio.jsx";
 import Form from "./Pages/Form.jsx";
 import Auth from "./Pages/Auth.jsx";
@@ -12,9 +14,8 @@ const App = () => {
   return (
     <div className="">
       <Routes>
-        {/* Root will become the Global Outreach hub. For now it points at
-            the GoGeneBio program page so nothing breaks for participants. */}
-        <Route path="/" element={<Navigate to="/gogenbio" replace />} />
+        <Route path="/" element={<Hub />} />
+        <Route path="/host" element={<Host />} />
         <Route path="/gogenbio" element={<GoGeneBio />} />
         <Route path="/form" element={<Form />} />
         <Route path="/auth" element={<Auth />} />

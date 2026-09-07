@@ -67,6 +67,7 @@ const ImageDrop = ({ file, imageUrl, onFile }) => {
 const TABS = [
   { key: "registrations", label: "Registrations" },
   { key: "testimonials", label: "Testimonials" },
+  { key: "hosts", label: "Host Applications" },
   { key: "regions", label: "Regions" },
   { key: "testimonial_page", label: "Testimonial Page" },
 ];
@@ -136,6 +137,20 @@ const TESTIMONIAL_COLUMNS = [
   { key: "created_at", label: "Submitted At" },
 ];
 
+const HOST_COLUMNS = [
+  { key: "full_name", label: "Full Name" },
+  { key: "email", label: "Email" },
+  { key: "phone", label: "Phone" },
+  { key: "organisation", label: "Organisation" },
+  { key: "country", label: "Country" },
+  { key: "city", label: "City" },
+  { key: "role", label: "Role" },
+  { key: "program", label: "Program" },
+  { key: "cohort_size", label: "Cohort Size" },
+  { key: "motivation", label: "Motivation" },
+  { key: "created_at", label: "Submitted At" },
+];
+
 const StatCard = ({ label, value }) => (
   <div className="bg-white rounded-lg shadow p-4">
     <p className="text-xs md:text-sm text-gray-500">{label}</p>
@@ -147,6 +162,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("registrations");
   const [registrations, setRegistrations] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
+  const [hostApplications, setHostApplications] = useState([]);
   const [regions, setRegions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -176,10 +192,11 @@ const AdminDashboard = () => {
     setLoading(true);
     setError("");
 
-    const [regRes, testRes, regionRes, promoRes, settingRes] = await Promise.all(
-      [
+    const [regRes, testRes, hostRes, regionRes, promoRes, settingRes] =
+      await Promise.all([
         supabase.from("registrations").select("*"),
         supabase.from("testimonials").select("*"),
+        supabase.from("host_applications").select("*"),
         supabase.from("regions").select("*"),
         supabase.from("promos").select("*"),
         supabase
@@ -187,14 +204,16 @@ const AdminDashboard = () => {
           .select("value")
           .eq("key", "testimonial_redirect_url")
           .maybeSingle(),
-      ]
-    );
+      ]);
 
     if (regRes.error) setError(regRes.error.message);
     else setRegistrations(sortByCreatedAt(regRes.data || []));
 
     if (testRes.error) setError((prev) => prev || testRes.error.message);
     else setTestimonials(sortByCreatedAt(testRes.data || []));
+
+    if (hostRes.error) setError((prev) => prev || hostRes.error.message);
+    else setHostApplications(sortByCreatedAt(hostRes.data || []));
 
     if (regionRes.error) setError((prev) => prev || regionRes.error.message);
     else
@@ -502,6 +521,8 @@ const AdminDashboard = () => {
               ? ` (${registrations.length})`
               : tab.key === "testimonials"
               ? ` (${testimonials.length})`
+              : tab.key === "hosts"
+              ? ` (${hostApplications.length})`
               : tab.key === "regions"
               ? ` (${regions.length})`
               : ""}
@@ -626,6 +647,73 @@ const AdminDashboard = () => {
               )}
             </tbody>
           </table>
+          </div>
+        </div>
+      ) : activeTab === "hosts" ? (
+        <div>
+          <div className="mb-4">
+            <button
+              onClick={() =>
+                downloadCsv(
+                  `host-applications-${new Date()
+                    .toISOString()
+                    .slice(0, 10)}.csv`,
+                  HOST_COLUMNS,
+                  hostApplications
+                )
+              }
+              disabled={hostApplications.length === 0}
+              className="border border-[#9D3CA7] text-[#9D3CA7] rounded-full px-4 py-2 text-sm cursor-pointer disabled:opacity-40"
+            >
+              Export CSV
+            </button>
+          </div>
+          <div className="overflow-x-auto bg-white rounded-lg shadow">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Email</th>
+                  <th className="p-3">Phone</th>
+                  <th className="p-3">Organisation</th>
+                  <th className="p-3">Country</th>
+                  <th className="p-3">City</th>
+                  <th className="p-3">Role</th>
+                  <th className="p-3">Program</th>
+                  <th className="p-3">Cohort</th>
+                  <th className="p-3">Motivation</th>
+                  <th className="p-3">Submitted</th>
+                </tr>
+              </thead>
+              <tbody>
+                {hostApplications.map((h, idx) => (
+                  <tr key={h.id ?? idx} className="border-t align-top">
+                    <td className="p-3 whitespace-nowrap">{h.full_name}</td>
+                    <td className="p-3 whitespace-nowrap">{h.email}</td>
+                    <td className="p-3 whitespace-nowrap">{h.phone || "-"}</td>
+                    <td className="p-3">{h.organisation || "-"}</td>
+                    <td className="p-3 whitespace-nowrap">{h.country}</td>
+                    <td className="p-3 whitespace-nowrap">{h.city || "-"}</td>
+                    <td className="p-3">{h.role || "-"}</td>
+                    <td className="p-3 whitespace-nowrap">{h.program || "-"}</td>
+                    <td className="p-3 whitespace-nowrap">
+                      {h.cohort_size || "-"}
+                    </td>
+                    <td className="p-3 min-w-[16rem]">{h.motivation || "-"}</td>
+                    <td className="p-3 whitespace-nowrap">
+                      {formatDate(h.created_at)}
+                    </td>
+                  </tr>
+                ))}
+                {hostApplications.length === 0 && (
+                  <tr>
+                    <td colSpan={11} className="p-3 text-center text-gray-500">
+                      No host applications yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       ) : activeTab === "regions" ? (
