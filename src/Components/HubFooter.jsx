@@ -17,8 +17,8 @@ const HubFooter = () => {
             </span>
           </div>
           <p className="font-landing text-[13.5px] text-[#8a8598] leading-relaxed">
-            A Genomac Holdings initiative bringing genomics &amp; bioinformatics
-            programs to communities worldwide.
+            We don&apos;t wait for opportunity to reach underserved communities.
+            We take the opportunity there.
           </p>
         </div>
 
