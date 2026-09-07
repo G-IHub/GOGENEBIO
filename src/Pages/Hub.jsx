@@ -141,7 +141,7 @@ const Hub = () => {
       </div>
 
       {/* Stats */}
-      <div className="px-4 md:px-8 lg:px-16 -mt-10">
+      <div className="relative z-10 px-4 md:px-8 lg:px-16 -mt-10">
         <div className="bg-white border border-[#e6e1ef] rounded-2xl shadow-[0_30px_60px_-30px_rgba(50,20,80,0.35)] grid grid-cols-1 md:grid-cols-3">
           {stats.map((stat, i) => (
             <div
