@@ -37,21 +37,52 @@ const Details = () => {
         </h2>
       </div>
 
-      <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-        <div className="hidden lg:block absolute top-[21px] left-[12.5%] right-[12.5%] h-px bg-[#e6e1ef]" />
-
-        {steps.map((step) => (
-          <div key={step.n} className="relative flex flex-col gap-4">
-            <div className="w-11 h-11 rounded-full bg-white border border-[#e6e1ef] flex items-center justify-center font-data font-semibold text-sm text-[#3d168b]">
-              {step.n}
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row lg:items-stretch">
+        {steps.map((step, i) => (
+          <React.Fragment key={step.n}>
+            <div className="flex-1 bg-white border border-[#e6e1ef] rounded-2xl p-6 flex flex-col gap-3 shadow-[0_20px_40px_-30px_rgba(50,20,80,0.3)]">
+              <div className="w-10 h-10 rounded-full bg-[#b241b71a] flex items-center justify-center font-data font-semibold text-sm text-[#3d168b]">
+                {step.n}
+              </div>
+              <h4 className="font-display font-semibold text-base text-[#0f0f0f]">
+                {step.title}
+              </h4>
+              <p className="font-landing text-sm text-[#55506b] leading-relaxed">
+                {step.text}
+              </p>
             </div>
-            <h4 className="font-display font-semibold text-base text-[#0f0f0f]">
-              {step.title}
-            </h4>
-            <p className="font-landing text-sm text-[#55506b] leading-relaxed">
-              {step.text}
-            </p>
-          </div>
+
+            {i < steps.length - 1 && (
+              <div
+                className="flex items-center justify-center shrink-0 text-[#c9bfdd] py-2 lg:py-0 lg:px-1"
+                aria-hidden="true"
+              >
+                {/* down chevron on stacked layout, right chevron on the row */}
+                <svg
+                  className="w-5 h-5 lg:hidden"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+                <svg
+                  className="hidden lg:block w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 6l6 6-6 6" />
+                </svg>
+              </div>
+            )}
+          </React.Fragment>
         ))}
       </div>
 
