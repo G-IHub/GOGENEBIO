@@ -198,7 +198,7 @@ const Form = () => {
         </div>
 
         <div className="flex justify-between">
-          <Link to="/">
+          <Link to="/gogenbio">
             <button className="border border-[#9D3CA7] rounded-full p-2 px-2.5 md:p-2.5 md:px-4 text-[14px] md:text-[16px] cursor-pointer">
               Back to Home
             </button>

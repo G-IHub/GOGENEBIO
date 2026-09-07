@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div className="flex items-center justify-between px-6 lg:px-16 py-4">
-      <div className="flex items-center gap-3">
+      <Link to="/gogenbio" className="flex items-center gap-3">
         <img src={logo} alt="Genomac Holdings" className="w-9 h-9 rounded-full object-cover" />
         <div className="flex flex-col leading-tight">
           <span className="font-display font-bold text-base text-[#0f0f0f]">GOGeneBio</span>
@@ -12,7 +12,7 @@ const Header = () => {
             A Genomac Holdings Initiative
           </span>
         </div>
-      </div>
+      </Link>
 
       <div className="hidden lg:flex items-center gap-10">
         <a href="#curriculum" className="font-landing text-sm font-medium text-[#4f4f4f] hover:text-[#b241b7] transition">

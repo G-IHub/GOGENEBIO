@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const ClosedForm = () => {
   return (
     <div className="flex justify-center items-center min-h-screen relative">
-      <Link to="/">
+      <Link to="/gogenbio">
         <button className="border border-[#9D3CA7] rounded-full p-2 px-2.5 md:p-2.5 md:px-4 text-[14px] md:text-[16px] cursor-pointer absolute top-5 left-5  md:top-10 md:left-10">
           &larr; Back to Home
         </button>

@@ -7,7 +7,7 @@ import Testimonials from "../Components/Testimonials";
 import CTASection from "../Components/CTASection";
 import Footer from "../Components/Footer";
 
-const Home = () => {
+const GoGeneBio = () => {
   return (
     <div>
       <Header />
@@ -22,4 +22,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default GoGeneBio;

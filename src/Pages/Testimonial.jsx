@@ -236,7 +236,7 @@ const Testimonial = () => {
                   Your testimonial has been received.
                 </p>
                 <Link
-                  to="/"
+                  to="/gogenbio"
                   className="inline-block mt-2 text-sm text-[#9D3CA7] underline"
                 >
                   Back to Home
