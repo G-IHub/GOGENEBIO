@@ -50,6 +50,12 @@ const lastOutreach = {
     "Bangladesh",
     "Egypt",
     "Canada",
+    "Philippines",
+    "Indonesia",
+    "Spain",
+    "Sudan",
+    "Botswana",
+    "Madagascar",
   ],
   institutions: [
     "University of Ibadan",
@@ -152,6 +158,24 @@ const testimonials = [
       "An eye-opening and enriching experience that greatly enhanced my understanding of computational approaches to biological data.",
     name: "Muhammad Shamsudeen Umar",
     country: "Nigeria",
+  },
+  {
+    quote:
+      "The outreach was very well organised and helped me understand the topic better.",
+    name: "Asmaa Idmbarek",
+    country: "Spain",
+  },
+  {
+    quote:
+      "I enjoyed the training and enhanced my knowledge in genomics and bioinformatics. Overall the training was wonderful.",
+    name: "Miriam Ropafadzo Chiminyah",
+    country: "Botswana",
+  },
+  {
+    quote:
+      "Being a host for GoGeneBio was both a challenge and a privilege. Watching participants from different backgrounds come together through genomics made every effort worth it. Initiatives like this ignite curiosity and build global collaboration — especially in my country, the Philippines.",
+    name: "Howard Gabriel G. Mercado",
+    country: "Local host · Philippines",
   },
 ];
 
@@ -465,8 +489,8 @@ const Hub = () => {
             <p className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#3d168b]">
               Last outreach · GoGeneBio 2025
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 mt-4">
+              <div className="py-4 sm:py-1 sm:pr-6 border-b sm:border-b-0 border-[#e0cff2]">
                 <span className="font-data font-semibold text-3xl text-[#3d168b]">
                   {lastOutreach.participants}
                 </span>
@@ -474,7 +498,7 @@ const Hub = () => {
                   participants
                 </p>
               </div>
-              <div>
+              <div className="py-4 sm:py-1 sm:px-6 border-b sm:border-b-0 sm:border-l border-[#e0cff2]">
                 <span className="font-data font-semibold text-3xl text-[#3d168b]">
                   {lastOutreach.countries.length}
                 </span>
@@ -482,7 +506,7 @@ const Hub = () => {
                   countries
                 </p>
               </div>
-              <div>
+              <div className="py-4 sm:py-1 sm:pl-6 sm:border-l border-[#e0cff2]">
                 <span className="font-data font-semibold text-3xl text-[#3d168b]">
                   {lastOutreach.rating}
                 </span>
