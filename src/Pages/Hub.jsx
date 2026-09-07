@@ -225,7 +225,7 @@ const Hub = () => {
       {/* Approach */}
       <div
         id="approach"
-        className="px-5 md:px-10 lg:px-16 py-16 md:py-24 bg-[#3d168b] text-white scroll-mt-20"
+        className="px-5 md:px-10 lg:px-16 py-16 md:py-24 bg-linear-to-r from-[#b241b7] to-[#3d168b] text-white scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto">
           <div className="bg-white/10 rounded-full px-4 py-1.5 inline-block">
