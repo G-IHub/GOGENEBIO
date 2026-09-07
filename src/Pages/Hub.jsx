@@ -35,6 +35,49 @@ const stats = [
   { value: "1000+", label: "Publications, scholarships, grants & jobs" },
 ];
 
+// PLACEHOLDER — reasons the Outreach focuses on underserved communities.
+const reasons = [
+  {
+    title: "Talent is everywhere, access isn't",
+    text: "Brilliant minds in under-resourced regions rarely get a first door into genomics. We open it.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3d168b" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18" />
+      </svg>
+    ),
+  },
+  {
+    title: "Local problems need local scientists",
+    text: "Health, crop and environmental challenges are best solved by people who live them. We build that capacity where it's needed.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3d168b" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </svg>
+    ),
+  },
+  {
+    title: "A young field should stay open",
+    text: "Genomics is still being written. Everyone deserves a chance to help write it — not only those near well-funded labs.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3d168b" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <path d="M12 7v13M4 5.5A2.5 2.5 0 0 1 6.5 3H12v15H6.5A2.5 2.5 0 0 0 4 20.5V5.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v15h5.5A2.5 2.5 0 0 1 20 20.5V5.5z" />
+      </svg>
+    ),
+  },
+  {
+    title: "One learner changes a community",
+    text: "Graduates go on to teach, mentor and start things. Reaching one person ripples outward for years.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="#3d168b" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <circle cx="12" cy="12" r="2.5" />
+        <path d="M12 5.5a6.5 6.5 0 0 1 6.5 6.5M12 3a9 9 0 0 1 9 9M12 18.5A6.5 6.5 0 0 1 5.5 12M12 21a9 9 0 0 1-9-9" />
+      </svg>
+    ),
+  },
+];
+
 const Eyebrow = ({ children }) => (
   <div className="bg-[#b241b71a] rounded-full px-4 py-1.5 inline-block">
     <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#3d168b]">
@@ -112,7 +155,7 @@ const Hub = () => {
         id="about"
         className="px-5 md:px-10 lg:px-16 py-16 md:py-24 scroll-mt-20"
       >
-        <div className="max-w-3xl">
+        <div className="rounded-3xl border border-[#e0cff2] bg-[#f5eefb] p-7 md:p-12">
           <Eyebrow>About</Eyebrow>
           <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
             One initiative, many ways in
@@ -130,6 +173,25 @@ const Hub = () => {
               philosophy, a mentor network, and a commitment to reaching learners
               wherever they are.
             </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
+            {reasons.map((r) => (
+              <div
+                key={r.title}
+                className="bg-white border border-[#e0cff2] rounded-2xl p-6 flex flex-col gap-3"
+              >
+                <div className="w-10 h-10 rounded-xl bg-[#b241b71a] flex items-center justify-center">
+                  {r.icon}
+                </div>
+                <h3 className="font-display font-semibold text-[15px] text-[#0f0f0f] leading-snug">
+                  {r.title}
+                </h3>
+                <p className="font-landing text-[13.5px] text-[#55506b] leading-relaxed">
+                  {r.text}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
