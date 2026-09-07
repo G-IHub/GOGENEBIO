@@ -327,6 +327,56 @@ const Hub = () => {
         </div>
       </div>
 
+      {/* Programs */}
+      <div
+        id="programs"
+        className="px-5 md:px-10 lg:px-16 py-16 md:py-24 bg-[#f5f3fa] scroll-mt-20"
+      >
+        <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-12">
+          <Eyebrow>Programs</Eyebrow>
+          <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+            Programs under the Outreach
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {programs.map((p) => (
+            <div
+              key={p.name}
+              className="bg-white border border-[#e6e1ef] rounded-2xl p-7 flex flex-col gap-4"
+            >
+              <span
+                className={`font-data text-[10px] font-semibold tracking-widest uppercase w-fit px-2.5 py-1 rounded-full ${
+                  p.live
+                    ? "bg-[#7ed00322] text-[#3f6b00]"
+                    : "bg-[#e6e1ef] text-[#8a8598]"
+                }`}
+              >
+                {p.tag}
+              </span>
+              <h3 className="font-display font-bold text-lg text-[#0f0f0f]">
+                {p.name}
+              </h3>
+              <p className="font-landing text-sm text-[#55506b] leading-relaxed flex-1">
+                {p.description}
+              </p>
+              {p.live ? (
+                <Link
+                  to={p.to}
+                  className="font-landing font-semibold text-sm text-[#b241b7] hover:text-[#3d168b]"
+                >
+                  Learn more &rarr;
+                </Link>
+              ) : (
+                <span className="font-landing text-sm text-[#8a8598]">
+                  Details coming soon
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Track record */}
       <div
         id="track-record"
@@ -448,56 +498,6 @@ const Hub = () => {
               ))}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Programs */}
-      <div
-        id="programs"
-        className="px-5 md:px-10 lg:px-16 py-16 md:py-24 bg-[#f5f3fa] scroll-mt-20"
-      >
-        <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-12">
-          <Eyebrow>Programs</Eyebrow>
-          <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
-            Programs under the Outreach
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {programs.map((p) => (
-            <div
-              key={p.name}
-              className="bg-white border border-[#e6e1ef] rounded-2xl p-7 flex flex-col gap-4"
-            >
-              <span
-                className={`font-data text-[10px] font-semibold tracking-widest uppercase w-fit px-2.5 py-1 rounded-full ${
-                  p.live
-                    ? "bg-[#7ed00322] text-[#3f6b00]"
-                    : "bg-[#e6e1ef] text-[#8a8598]"
-                }`}
-              >
-                {p.tag}
-              </span>
-              <h3 className="font-display font-bold text-lg text-[#0f0f0f]">
-                {p.name}
-              </h3>
-              <p className="font-landing text-sm text-[#55506b] leading-relaxed flex-1">
-                {p.description}
-              </p>
-              {p.live ? (
-                <Link
-                  to={p.to}
-                  className="font-landing font-semibold text-sm text-[#b241b7] hover:text-[#3d168b]"
-                >
-                  Learn more &rarr;
-                </Link>
-              ) : (
-                <span className="font-landing text-sm text-[#8a8598]">
-                  Details coming soon
-                </span>
-              )}
-            </div>
-          ))}
         </div>
       </div>
 
