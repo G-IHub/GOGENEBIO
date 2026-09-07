@@ -61,25 +61,97 @@ const lastOutreach = {
   responses: "500+",
 };
 
-// Trimmed from full responses in the testimonial sheet.
-const stories = [
+// Lightly edited from the testimonial sheet — one or more per country.
+const testimonials = [
   {
     quote:
-      "The three-day training at the University of Ibadan completely changed how I think about infectious disease — from textbook theory to practical data science. We spent most of our time on real sequence data: pulling from NCBI, building phylogenetic trees to track how viruses spread, working in Geneious and Galaxy. As a vet student, I now see I can have real impact on One Health. This is the direction of my career now.",
-    name: "Olatunde Michael Adedayo",
-    detail: "Veterinary Medicine · University of Ibadan, Nigeria",
+      "I joined the training as a novice, but now I've been equipped with new skills — tools useful for both my professional career and my academics. Thank you for this valuable opportunity.",
+    name: "Awoyomi Oluwaseyi Lola",
+    country: "Nigeria",
   },
   {
     quote:
-      "As a bioengineering student deeply engaged in computational biology, it was a privilege to join. The course bridges foundational theory with practical workflows in bioinformatics, genomics and transcriptomics — complex concepts taught through real examples and hands-on exercises with Geneious, Galaxy and NCBI. It has significantly elevated my professional profile and directly benefits my final-year project.",
-    name: "Raoua Makni",
-    detail: "Bioengineering student · Tunisia",
+      "As a biology PhD graduate working on antimicrobial resistance in MDR and XDR bacteria, it was an impactful opportunity to learn about Geneious and transcriptomics. Thank you for making genomics simple and accessible to all participants.",
+    name: "Meha Fethi",
+    country: "Tunisia",
   },
   {
     quote:
-      "An exceptional and highly impactful experience. The content covered RNA-seq analysis, genome assembly and Python scripting — not just lectured, but taught with hands-on exercises that immediately built my confidence with complex genomic datasets. The virtual format was seamless: interactive, well-supported, easy to follow. I highly recommend it to any researcher, student or professional wanting serious, applicable skills in computational genomics.",
-    name: "Dr. Kassim Yusuf Umar",
-    detail: "Usmanu Danfodiyo University, Sokoto, Nigeria",
+      "As someone with no prior programming experience, I was initially intimidated. But the material was carefully designed for beginners, and the hands-on workshops made learning manageable and engaging. I highly recommend it to any biologist interested in computational methods.",
+    name: "Nayab Ali",
+    country: "Pakistan",
+  },
+  {
+    quote:
+      "Exceptionally well-structured and informative. The facilitator provided practical insights I can immediately apply to my work. I feel more confident and better equipped to perform my role.",
+    name: "Sailota Njovu",
+    country: "Zambia",
+  },
+  {
+    quote:
+      "The training was very interesting and helpful. I learned a lot of new skills and the instructor was excellent. Thank you for this great experience!",
+    name: "Soufiane Yassara",
+    country: "Morocco",
+  },
+  {
+    quote:
+      "Thank you for the Geneious software access and hands-on practice. The teacher was very good — whenever I had a doubt, he cleared it.",
+    name: "Neha Kumari",
+    country: "India",
+  },
+  {
+    quote:
+      "The training sessions were comprehensive and clearly explained. The free access to the software played a pivotal role.",
+    name: "Tayeba Zaman Fabia",
+    country: "Bangladesh",
+  },
+  {
+    quote:
+      "The training was excellent. I appreciate the Genomac team for building this network, and I look forward to a time when our institutions of higher learning partner with Genomac to train future bioinformaticians.",
+    name: "Esumeh Frederick I.",
+    country: "Nigeria",
+  },
+  {
+    quote:
+      "A great experience. I gained valuable insights into transcriptomics and RNA-Seq analysis, and I appreciated the practical sessions on bioinformatics tools.",
+    name: "Maryem Saidane",
+    country: "Tunisia",
+  },
+  {
+    quote:
+      "An exceptional learning experience. The hands-on sessions and practical exposure to tools like Geneious strengthened my understanding of genomic data analysis. Truly grateful for such a valuable, fully funded global opportunity.",
+    name: "Laiba Siddique",
+    country: "Pakistan",
+  },
+  {
+    quote:
+      "Informative and well-structured. The content was relevant, practical and easy to follow. It has improved my understanding of bioinformatics tools and their applications.",
+    name: "Faith Olohize Abraham",
+    country: "Nigeria",
+  },
+  {
+    quote:
+      "Theoretical knowledge paired with hands-on practical sessions that made complex concepts accessible. The instructors were experts, and incredibly supportive — every participant felt confident to apply what they learned. I wholeheartedly recommend it.",
+    name: "Odette Kasonde",
+    country: "Zambia",
+  },
+  {
+    quote:
+      "The facilitators combined in-depth scientific knowledge with practical insight. Well-structured sessions, with valuable exposure to cutting-edge genomic technologies and bioinformatics tools.",
+    name: "Wael Ayari",
+    country: "Tunisia",
+  },
+  {
+    quote:
+      "An incredible learning experience. The mentors explained complex topics in a very clear way. It truly enhanced my interest and confidence in pursuing genomics research.",
+    name: "Roshaan Fatima",
+    country: "Pakistan",
+  },
+  {
+    quote:
+      "An eye-opening and enriching experience that greatly enhanced my understanding of computational approaches to biological data.",
+    name: "Muhammad Shamsudeen Umar",
+    country: "Nigeria",
   },
 ];
 
@@ -458,21 +530,32 @@ const Hub = () => {
               </span>
             </div>
           </div>
+        </div>
 
-          {/* Featured stories */}
-          <div className="mt-12">
+        {/* In their words — auto-sliding */}
+        <div className="mt-14">
+          <div className="max-w-6xl mx-auto">
             <h3 className="font-display font-semibold text-lg text-[#0f0f0f]">
               In their words
             </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-5">
-              {stories.map((s) => (
-                <div
-                  key={s.name}
-                  className="bg-white border border-[#e6e1ef] rounded-2xl p-7 flex flex-col gap-4"
+            <p className="font-landing text-sm text-[#55506b] mt-1">
+              Participants from the last outreach — one or more per country.
+            </p>
+          </div>
+
+          <div className="marquee-pause mt-6 -mx-5 md:-mx-10 lg:-mx-16 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3rem,black_calc(100%-3rem),transparent)]">
+            <div
+              className="animate-marquee-x flex gap-5 w-max py-1 px-5 md:px-10 lg:px-16"
+              style={{ "--marquee-duration": "110s" }}
+            >
+              {[...testimonials, ...testimonials].map((t, i) => (
+                <figure
+                  key={i}
+                  className="w-[300px] shrink-0 bg-white border border-[#e6e1ef] rounded-2xl p-6 flex flex-col gap-3"
                 >
                   <svg
-                    width="28"
-                    height="20"
+                    width="26"
+                    height="18"
                     viewBox="0 0 30 22"
                     fill="none"
                     aria-hidden="true"
@@ -483,18 +566,18 @@ const Hub = () => {
                       opacity="0.5"
                     />
                   </svg>
-                  <p className="font-landing text-sm text-[#3f3a52] leading-relaxed flex-1">
-                    {s.quote}
-                  </p>
-                  <div className="pt-1.5 border-t border-[#e6e1ef]">
-                    <p className="font-landing text-[13.5px] font-semibold text-[#0f0f0f]">
-                      {s.name}
-                    </p>
-                    <p className="font-landing text-xs text-[#8a8598] mt-0.5">
-                      {s.detail}
-                    </p>
-                  </div>
-                </div>
+                  <blockquote className="font-landing text-sm text-[#3f3a52] leading-relaxed flex-1">
+                    {t.quote}
+                  </blockquote>
+                  <figcaption className="pt-2 border-t border-[#e6e1ef]">
+                    <span className="block font-landing text-[13px] font-semibold text-[#0f0f0f]">
+                      {t.name}
+                    </span>
+                    <span className="block font-landing text-xs text-[#8a8598]">
+                      {t.country}
+                    </span>
+                  </figcaption>
+                </figure>
               ))}
             </div>
           </div>

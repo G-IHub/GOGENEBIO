@@ -7,3 +7,24 @@
   --font-landing: "IBM Plex Sans", system-ui, sans-serif;
   --font-data: "IBM Plex Mono", ui-monospace, monospace;
 }
+
+/* Auto-sliding testimonial marquee (hub Track Record section). */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee-x {
+  animation: marquee-x var(--marquee-duration, 60s) linear infinite;
+}
+.marquee-pause:hover .animate-marquee-x {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-x {
+    animation: none;
+  }
+}
