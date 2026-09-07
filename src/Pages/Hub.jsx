@@ -236,7 +236,7 @@ const Hub = () => {
           <h2 className="font-display font-bold text-2xl md:text-4xl mt-4">
             What Makes Our Outreach Different?
           </h2>
-          <p className="font-display font-semibold text-lg md:text-2xl text-[#7ed003] mt-5">
+          <p className="font-display font-semibold text-lg md:text-2xl text-[#a3e635] mt-5">
             We don&apos;t just tell people about science. We let them experience
             it.
           </p>
@@ -256,7 +256,7 @@ const Hub = () => {
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#7ed003"
+                  stroke="#a3e635"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -274,7 +274,7 @@ const Hub = () => {
 
           <p className="font-display font-bold text-xl md:text-2xl mt-12">
             The event is not the destination.{" "}
-            <span className="text-[#7ed003]">It is the beginning.</span>
+            <span className="text-[#a3e635]">It is the beginning.</span>
           </p>
         </div>
       </div>
