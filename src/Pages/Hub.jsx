@@ -35,6 +35,19 @@ const stats = [
   { value: "1000+", label: "Publications, scholarships, grants & jobs" },
 ];
 
+const approachItems = [
+  "Explore real genomic datasets",
+  "Perform practical bioinformatics analyses",
+  "Build computational workflows",
+  "Use AI for scientific research",
+  "Meet researchers and industry professionals",
+  "Work on mini research projects",
+  "Discover scientific career pathways",
+  "Find scholarships and research opportunities",
+  "Join global scientific communities",
+  "Continue learning after the outreach program",
+];
+
 // PLACEHOLDER — reasons the Outreach focuses on underserved communities.
 const reasons = [
   {
@@ -206,6 +219,63 @@ const Hub = () => {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Approach */}
+      <div
+        id="approach"
+        className="px-5 md:px-10 lg:px-16 py-16 md:py-24 bg-[#3d168b] text-white scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-white/10 rounded-full px-4 py-1.5 inline-block">
+            <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#c9b8ec]">
+              Our Approach
+            </span>
+          </div>
+          <h2 className="font-display font-bold text-2xl md:text-4xl mt-4">
+            What Makes Our Outreach Different?
+          </h2>
+          <p className="font-display font-semibold text-lg md:text-2xl text-[#7ed003] mt-5">
+            We don&apos;t just tell people about science. We let them experience
+            it.
+          </p>
+          <p className="font-landing text-sm md:text-base text-[#e6ddf5] leading-relaxed mt-5 max-w-2xl">
+            Traditional outreach often ends when the presentation ends. Our goal
+            is different. We design programs that can take participants from their
+            first encounter with genomics to their first practical experience
+            with it.
+          </p>
+
+          <p className="font-landing text-sm text-[#c9b8ec] mt-10 mb-4">
+            Depending on the program, participants may:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+            {approachItems.map((item) => (
+              <div key={item} className="flex gap-3 items-start">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#7ed003"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4 mt-1 shrink-0"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                <span className="font-landing text-sm md:text-[15px] text-white">
+                  {item}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="font-display font-bold text-xl md:text-2xl mt-12">
+            The event is not the destination.{" "}
+            <span className="text-[#7ed003]">It is the beginning.</span>
+          </p>
         </div>
       </div>
 
