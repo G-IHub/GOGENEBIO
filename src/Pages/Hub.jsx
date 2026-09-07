@@ -284,15 +284,15 @@ const Hub = () => {
           <h2 className="font-display font-bold text-2xl md:text-4xl mt-4">
             What Makes Our Outreach Different?
           </h2>
-          <p className="font-display font-semibold text-lg md:text-2xl text-[#a3e635] mt-5">
-            We don&apos;t just tell people about science. We let them experience
-            it.
-          </p>
-          <p className="font-landing text-sm md:text-base text-[#e6ddf5] leading-relaxed mt-5 max-w-2xl">
-            Traditional outreach often ends when the presentation ends. Our goal
-            is different. We design programs that can take participants from their
-            first encounter with genomics to their first practical experience
-            with it.
+          <p className="font-landing text-sm md:text-lg text-[#e6ddf5] leading-relaxed mt-5 max-w-3xl">
+            We don&apos;t just tell people about science —{" "}
+            <span className="text-[#a3e635] font-semibold">
+              we let them experience it
+            </span>
+            . Traditional outreach often ends when the presentation ends. Our
+            goal is different: we design programs that take participants from
+            their first encounter with genomics to their first practical
+            experience with it.
           </p>
 
           <p className="font-landing text-sm text-[#c9b8ec] mt-10 mb-4">
