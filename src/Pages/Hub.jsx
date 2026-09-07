@@ -108,16 +108,16 @@ const Hub = () => {
               around the world.
             </p>
             <div className="flex flex-wrap gap-3 mt-8">
-              <a href="#programs">
-                <button className="font-landing font-semibold text-white py-2.5 px-6 bg-linear-to-r from-[#b241b7] to-[#3d168b] rounded-full hover:-translate-y-0.5 transition text-sm cursor-pointer">
-                  Explore Programs
-                </button>
-              </a>
               <Link to="/host">
-                <button className="font-landing font-semibold text-[#3d168b] py-2.5 px-6 border border-[#3d168b] rounded-full hover:bg-[#3d168b] hover:text-white transition text-sm cursor-pointer">
+                <button className="font-landing font-semibold text-white py-2.5 px-6 bg-linear-to-r from-[#b241b7] to-[#3d168b] rounded-full hover:-translate-y-0.5 transition text-sm cursor-pointer">
                   Host a Program &rarr;
                 </button>
               </Link>
+              <a href="#programs">
+                <button className="font-landing font-semibold text-[#3d168b] py-2.5 px-6 border border-[#3d168b] rounded-full hover:bg-[#3d168b] hover:text-white transition text-sm cursor-pointer">
+                  Explore Programs
+                </button>
+              </a>
             </div>
           </div>
 
