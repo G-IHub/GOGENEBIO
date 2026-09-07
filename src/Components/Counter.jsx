@@ -40,25 +40,45 @@ const Counter = ({ value, className = "", duration = 1200 }) => {
     const el = ref.current;
     if (!el) return;
     let raf;
-    // Safety net: show the real value if the observer never fires.
+    let started = false;
+
+    const animate = () => {
+      if (started) return;
+      started = true;
+      const start = performance.now();
+      const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        setDisplay(
+          parsed.prefix +
+            fmt(parsed.target * eased, parsed.decimals, parsed.hadComma) +
+            parsed.suffix
+        );
+        if (t < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    };
+
+    // Safety net: show the real value if nothing else fires.
     const fallback = setTimeout(() => setDisplay(value), 2600);
+
+    // Already visible at mount? animate now.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < (window.innerHeight || 0) && rect.bottom > 0) {
+      clearTimeout(fallback);
+      animate();
+      return () => {
+        clearTimeout(fallback);
+        if (raf) cancelAnimationFrame(raf);
+      };
+    }
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         io.disconnect();
         clearTimeout(fallback);
-        const start = performance.now();
-        const tick = (now) => {
-          const t = Math.min(1, (now - start) / duration);
-          const eased = 1 - Math.pow(1 - t, 3);
-          setDisplay(
-            parsed.prefix +
-              fmt(parsed.target * eased, parsed.decimals, parsed.hadComma) +
-              parsed.suffix
-          );
-          if (t < 1) raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
+        animate();
       },
       { threshold: 0.4 }
     );

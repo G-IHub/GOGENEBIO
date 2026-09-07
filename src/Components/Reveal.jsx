@@ -21,6 +21,14 @@ const Reveal = ({ children, className = "", delay = 0 }) => {
     }
     const el = ref.current;
     if (!el) return;
+
+    // Already on screen at mount (above the fold): show immediately, no reveal.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < (window.innerHeight || 0) && rect.bottom > 0) {
+      setShown(true);
+      return;
+    }
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
