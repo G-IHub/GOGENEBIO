@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
+import Reveal from "./Reveal";
 
 const QuoteIcon = () => (
   <svg width="30" height="22" viewBox="0 0 30 22" fill="none">
@@ -33,7 +34,7 @@ const Testimonials = () => {
 
   return (
     <div id="testimonials" className="px-5 md:px-10 lg:px-16 py-16 md:py-20 scroll-mt-20">
-      <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-10 md:mb-14">
+      <Reveal className="flex flex-col items-center text-center max-w-xl mx-auto mb-10 md:mb-14">
         <div className="bg-[#b241b71a] rounded-full px-4 py-1.5">
           <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#3d168b]">
             From Our Community
@@ -42,7 +43,7 @@ const Testimonials = () => {
         <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
           What Past Participants Say
         </h2>
-      </div>
+      </Reveal>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {testimonials.map((t) => (

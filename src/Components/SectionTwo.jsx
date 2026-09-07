@@ -1,4 +1,6 @@
 import React from "react";
+import Reveal from "./Reveal";
+import Counter from "./Counter";
 
 const stats = [
   {
@@ -18,7 +20,7 @@ const stats = [
 const SectionTwo = () => {
   return (
     <div className="relative z-10 mx-4 md:mx-8 lg:mx-16 mt-6 lg:-mt-12">
-      <div className="bg-white border border-[#e6e1ef] rounded-2xl shadow-[0_30px_60px_-30px_rgba(50,20,80,0.35)] grid grid-cols-1 md:grid-cols-3">
+      <Reveal className="bg-white border border-[#e6e1ef] rounded-2xl shadow-[0_30px_60px_-30px_rgba(50,20,80,0.35)] grid grid-cols-1 md:grid-cols-3">
         {stats.map((stat, index) => (
           <div
             key={stat.value}
@@ -28,15 +30,16 @@ const SectionTwo = () => {
                 : ""
             }`}
           >
-            <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
-              {stat.value}
-            </span>
+            <Counter
+              value={stat.value}
+              className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]"
+            />
             <span className="font-landing text-xs md:text-[13.5px] text-[#55506b] leading-relaxed">
               {stat.label}
             </span>
           </div>
         ))}
-      </div>
+      </Reveal>
     </div>
   );
 };

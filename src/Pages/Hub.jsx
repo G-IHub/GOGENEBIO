@@ -1,6 +1,9 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import HubHeader from "../Components/HubHeader";
 import HubFooter from "../Components/HubFooter";
+import Reveal from "../Components/Reveal";
+import Counter from "../Components/Counter";
 import heroCollage from "../assets/hero_img.png";
 
 // PLACEHOLDER COPY — replace names / descriptions with the real ones.
@@ -264,7 +267,7 @@ const Hub = () => {
           }}
         />
         <div className="relative flex flex-col lg:flex-row lg:items-center lg:gap-12 max-w-6xl">
-          <div className="lg:w-7/12">
+          <Reveal className="lg:w-7/12">
             <Eyebrow>Global Outreach</Eyebrow>
             <h1 className="font-display font-bold text-[26px] md:text-5xl leading-tight mt-5">
               Bringing genomics &amp; bioinformatics to{" "}
@@ -289,17 +292,17 @@ const Hub = () => {
                 </button>
               </a>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="hidden lg:block lg:w-5/12">
+          <Reveal delay={120} className="hidden lg:block lg:w-5/12">
             <img src={heroCollage} alt="" className="w-full" />
-          </div>
+          </Reveal>
         </div>
       </div>
 
       {/* Stats */}
       <div className="relative z-10 px-4 md:px-8 lg:px-16 -mt-10">
-        <div className="bg-white border border-[#e6e1ef] rounded-2xl shadow-[0_30px_60px_-30px_rgba(50,20,80,0.35)] grid grid-cols-1 md:grid-cols-3">
+        <Reveal className="bg-white border border-[#e6e1ef] rounded-2xl shadow-[0_30px_60px_-30px_rgba(50,20,80,0.35)] grid grid-cols-1 md:grid-cols-3">
           {stats.map((stat, i) => (
             <div
               key={stat.value}
@@ -309,15 +312,16 @@ const Hub = () => {
                   : ""
               }`}
             >
-              <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
-                {stat.value}
-              </span>
+              <Counter
+                value={stat.value}
+                className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]"
+              />
               <span className="font-landing text-[13.5px] text-[#55506b] leading-relaxed">
                 {stat.label}
               </span>
             </div>
           ))}
-        </div>
+        </Reveal>
       </div>
 
       {/* About */}
@@ -325,7 +329,7 @@ const Hub = () => {
         id="about"
         className="px-5 md:px-10 lg:px-16 py-16 md:py-24 scroll-mt-20"
       >
-        <div className="rounded-3xl border border-[#e0cff2] bg-[#f5eefb] p-7 md:p-12">
+        <Reveal className="rounded-3xl border border-[#e0cff2] bg-[#f5eefb] p-7 md:p-12">
           <Eyebrow>About</Eyebrow>
           <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
             One initiative, many ways in
@@ -365,7 +369,7 @@ const Hub = () => {
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Approach */}
@@ -373,7 +377,7 @@ const Hub = () => {
         id="approach"
         className="px-5 md:px-10 lg:px-16 py-16 md:py-24 bg-linear-to-r from-[#b241b7] to-[#3d168b] text-white scroll-mt-20"
       >
-        <div className="max-w-5xl mx-auto">
+        <Reveal className="max-w-5xl mx-auto">
           <div className="bg-white/10 rounded-full px-4 py-1.5 inline-block">
             <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#c9b8ec]">
               Our Approach
@@ -422,7 +426,7 @@ const Hub = () => {
             The event is not the destination.{" "}
             <span className="text-[#a3e635]">It is the beginning.</span>
           </p>
-        </div>
+        </Reveal>
       </div>
 
       {/* Programs */}
@@ -430,14 +434,14 @@ const Hub = () => {
         id="programs"
         className="px-5 md:px-10 lg:px-16 py-16 md:py-24 bg-[#f5f3fa] scroll-mt-20"
       >
-        <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-12">
+        <Reveal className="flex flex-col items-center text-center max-w-xl mx-auto mb-12">
           <Eyebrow>Programs</Eyebrow>
           <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
             Programs under the Outreach
           </h2>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <Reveal className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {programs.map((p) => (
             <div
               key={p.name}
@@ -472,7 +476,7 @@ const Hub = () => {
               )}
             </div>
           ))}
-        </div>
+        </Reveal>
       </div>
 
       {/* Track record */}
@@ -480,7 +484,7 @@ const Hub = () => {
         id="track-record"
         className="px-5 md:px-10 lg:px-16 py-16 md:py-24 scroll-mt-20"
       >
-        <div className="max-w-6xl mx-auto">
+        <Reveal className="max-w-6xl mx-auto">
           <Eyebrow>Track Record</Eyebrow>
           <h2 className="font-display font-bold text-xl md:text-3xl mt-4">
             Proven across regions
@@ -493,25 +497,28 @@ const Hub = () => {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 mt-4">
               <div className="py-4 sm:py-1 sm:pr-6 border-b sm:border-b-0 border-[#e0cff2]">
-                <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
-                  {lastOutreach.participants}
-                </span>
+                <Counter
+                  value={String(lastOutreach.participants)}
+                  className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]"
+                />
                 <p className="font-landing text-xs text-[#55506b] mt-1">
                   participants
                 </p>
               </div>
               <div className="py-4 sm:py-1 sm:px-6 border-b sm:border-b-0 sm:border-l border-[#e0cff2]">
-                <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
-                  {lastOutreach.countries.length}
-                </span>
+                <Counter
+                  value={String(lastOutreach.countries.length)}
+                  className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]"
+                />
                 <p className="font-landing text-xs text-[#55506b] mt-1">
                   countries
                 </p>
               </div>
               <div className="py-4 sm:py-1 sm:pl-6 sm:border-l border-[#e0cff2]">
-                <span className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]">
-                  {lastOutreach.rating}
-                </span>
+                <Counter
+                  value={String(lastOutreach.rating)}
+                  className="font-data font-semibold text-2xl md:text-3xl text-[#3d168b]"
+                />
                 <p className="font-landing text-xs text-[#55506b] mt-1">
                   average rating ({lastOutreach.responses} responses)
                 </p>
@@ -556,18 +563,18 @@ const Hub = () => {
               </span>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* In their words — auto-sliding */}
         <div className="mt-14">
-          <div className="max-w-6xl mx-auto">
+          <Reveal className="max-w-6xl mx-auto">
             <h3 className="font-display font-semibold text-base md:text-lg text-[#0f0f0f]">
               In their words
             </h3>
             <p className="font-landing text-sm text-[#55506b] mt-1">
               Participants from the last outreach — one or more per country.
             </p>
-          </div>
+          </Reveal>
 
           <div className="marquee-pause mt-6 -mx-5 md:-mx-10 lg:-mx-16 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3rem,black_calc(100%-3rem),transparent)]">
             <div
@@ -615,7 +622,7 @@ const Hub = () => {
         id="host"
         className="px-5 md:px-10 lg:px-16 py-16 md:py-24 scroll-mt-20"
       >
-        <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#b241b7] to-[#3d168b] py-14 md:py-16 px-8 flex flex-col items-center text-center gap-4">
+        <Reveal className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#b241b7] to-[#3d168b] py-14 md:py-16 px-8 flex flex-col items-center text-center gap-4">
           <div className="absolute -top-16 -right-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl" />
           <div className="absolute -bottom-20 -left-10 w-64 h-64 bg-[#7ed003] opacity-15 rounded-full blur-3xl" />
           <h2 className="relative font-display font-bold text-xl md:text-3xl text-white max-w-xl">
@@ -630,7 +637,7 @@ const Hub = () => {
               Apply to Host &rarr;
             </button>
           </Link>
-        </div>
+        </Reveal>
       </div>
 
       <HubFooter />

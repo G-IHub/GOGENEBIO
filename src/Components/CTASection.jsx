@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Reveal from "./Reveal";
 
 const CTASection = () => {
   return (
     <div className="px-5 md:px-10 lg:px-16 pb-16 md:pb-20">
-      <div className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#b241b7] to-[#3d168b] py-14 md:py-16 px-8 flex flex-col items-center text-center gap-4">
+      <Reveal className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#b241b7] to-[#3d168b] py-14 md:py-16 px-8 flex flex-col items-center text-center gap-4">
         <div className="absolute -top-16 -right-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl" />
         <div className="absolute -bottom-20 -left-10 w-64 h-64 bg-[#7ed003] opacity-15 rounded-full blur-3xl" />
 
@@ -19,7 +20,7 @@ const CTASection = () => {
             Register Now &rarr;
           </button>
         </Link>
-      </div>
+      </Reveal>
     </div>
   );
 };

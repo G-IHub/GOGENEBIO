@@ -1,4 +1,5 @@
 import React from "react";
+import Reveal from "./Reveal";
 
 const items = [
   {
@@ -61,7 +62,7 @@ const items = [
 const ProgramBenefits = () => {
   return (
     <div id="curriculum" className="px-5 md:px-10 lg:px-16 pt-20 md:pt-28 pb-16 md:pb-20 flex flex-col items-center scroll-mt-20">
-      <div className="flex flex-col items-center text-center max-w-xl mb-10 md:mb-14">
+      <Reveal className="flex flex-col items-center text-center max-w-xl mb-10 md:mb-14">
         <div className="bg-[#b241b71a] rounded-full px-4 py-1.5">
           <span className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#3d168b]">
             Curriculum
@@ -73,9 +74,9 @@ const ProgramBenefits = () => {
         <p className="font-landing text-[13px] md:text-base text-[#55506b] mt-2">
           By the end of the program, you'll be able to:
         </p>
-      </div>
+      </Reveal>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-6xl">
+      <Reveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-6xl">
         {items.map((item, index) => (
           <div
             key={index}
@@ -89,7 +90,7 @@ const ProgramBenefits = () => {
             </p>
           </div>
         ))}
-      </div>
+      </Reveal>
     </div>
   );
 };
