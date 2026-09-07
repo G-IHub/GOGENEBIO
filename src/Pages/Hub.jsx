@@ -35,6 +35,54 @@ const stats = [
   { value: "1000+", label: "Publications, scholarships, grants & jobs" },
 ];
 
+// From the last GoGeneBio Global Outreach (Oct–Nov 2025). Confirm/adjust
+// the participant count and lists with real figures.
+const lastOutreach = {
+  participants: "~4,000",
+  countries: [
+    "Tunisia",
+    "Pakistan",
+    "Nigeria",
+    "Zambia",
+    "India",
+    "Algeria",
+    "Morocco",
+    "Bangladesh",
+    "Egypt",
+    "Canada",
+  ],
+  institutions: [
+    "University of Ibadan",
+    "Usmanu Danfodiyo University, Sokoto",
+    "LAUTECH, Ogbomoso",
+    "Ambrose Alli University, Ekpoma",
+  ],
+  rating: "4.1 / 5",
+  responses: "500+",
+};
+
+// Trimmed from full responses in the testimonial sheet.
+const stories = [
+  {
+    quote:
+      "The three-day training at the University of Ibadan completely changed how I think about infectious disease — from textbook theory to practical data science. We spent most of our time on real sequence data: pulling from NCBI, building phylogenetic trees to track how viruses spread, working in Geneious and Galaxy. As a vet student, I now see I can have real impact on One Health. This is the direction of my career now.",
+    name: "Olatunde Michael Adedayo",
+    detail: "Veterinary Medicine · University of Ibadan, Nigeria",
+  },
+  {
+    quote:
+      "As a bioengineering student deeply engaged in computational biology, it was a privilege to join. The course bridges foundational theory with practical workflows in bioinformatics, genomics and transcriptomics — complex concepts taught through real examples and hands-on exercises with Geneious, Galaxy and NCBI. It has significantly elevated my professional profile and directly benefits my final-year project.",
+    name: "Raoua Makni",
+    detail: "Bioengineering student · Tunisia",
+  },
+  {
+    quote:
+      "An exceptional and highly impactful experience. The content covered RNA-seq analysis, genome assembly and Python scripting — not just lectured, but taught with hands-on exercises that immediately built my confidence with complex genomic datasets. The virtual format was seamless: interactive, well-supported, easy to follow. I highly recommend it to any researcher, student or professional wanting serious, applicable skills in computational genomics.",
+    name: "Dr. Kassim Yusuf Umar",
+    detail: "Usmanu Danfodiyo University, Sokoto, Nigeria",
+  },
+];
+
 const approachItems = [
   "Explore real genomic datasets",
   "Perform practical bioinformatics analyses",
@@ -276,6 +324,130 @@ const Hub = () => {
             The event is not the destination.{" "}
             <span className="text-[#a3e635]">It is the beginning.</span>
           </p>
+        </div>
+      </div>
+
+      {/* Track record */}
+      <div
+        id="track-record"
+        className="px-5 md:px-10 lg:px-16 py-16 md:py-24 scroll-mt-20"
+      >
+        <div className="max-w-6xl mx-auto">
+          <Eyebrow>Track Record</Eyebrow>
+          <h2 className="font-display font-bold text-2xl md:text-3xl mt-4">
+            Proven across regions
+          </h2>
+
+          {/* Last outreach recap */}
+          <div className="mt-8 rounded-3xl border border-[#e0cff2] bg-[#f5eefb] p-7 md:p-10">
+            <p className="font-data text-[11px] font-semibold tracking-widest uppercase text-[#3d168b]">
+              Last outreach · GoGeneBio 2025
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
+              <div>
+                <span className="font-data font-semibold text-3xl text-[#3d168b]">
+                  {lastOutreach.participants}
+                </span>
+                <p className="font-landing text-[13.5px] text-[#55506b] mt-1">
+                  participants
+                </p>
+              </div>
+              <div>
+                <span className="font-data font-semibold text-3xl text-[#3d168b]">
+                  {lastOutreach.countries.length}
+                </span>
+                <p className="font-landing text-[13.5px] text-[#55506b] mt-1">
+                  countries
+                </p>
+              </div>
+              <div>
+                <span className="font-data font-semibold text-3xl text-[#3d168b]">
+                  {lastOutreach.rating}
+                </span>
+                <p className="font-landing text-[13.5px] text-[#55506b] mt-1">
+                  average rating ({lastOutreach.responses} responses)
+                </p>
+              </div>
+            </div>
+
+            <p className="font-landing text-xs font-semibold uppercase tracking-wide text-[#8a8598] mt-8 mb-3">
+              Countries reached
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {lastOutreach.countries.map((c) => (
+                <span
+                  key={c}
+                  className="font-landing text-[13px] bg-white border border-[#e0cff2] rounded-full px-3 py-1 text-[#3f3a52]"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Where we've worked */}
+          <div className="mt-10">
+            <h3 className="font-display font-semibold text-lg text-[#0f0f0f]">
+              Where we&apos;ve worked
+            </h3>
+            <p className="font-landing text-sm text-[#55506b] mt-2 max-w-2xl">
+              Recent outreach editions have run with partner universities and
+              institutions, including:
+            </p>
+            <div className="flex flex-wrap gap-2 mt-4">
+              {lastOutreach.institutions.map((i) => (
+                <span
+                  key={i}
+                  className="font-landing text-[13px] bg-[#f5f3fa] border border-[#e6e1ef] rounded-full px-3 py-1 text-[#3f3a52]"
+                >
+                  {i}
+                </span>
+              ))}
+              <span className="font-landing text-[13px] text-[#8a8598] px-3 py-1">
+                + partner universities across Tunisia, Pakistan and Zambia
+              </span>
+            </div>
+          </div>
+
+          {/* Featured stories */}
+          <div className="mt-12">
+            <h3 className="font-display font-semibold text-lg text-[#0f0f0f]">
+              In their words
+            </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-5">
+              {stories.map((s) => (
+                <div
+                  key={s.name}
+                  className="bg-white border border-[#e6e1ef] rounded-2xl p-7 flex flex-col gap-4"
+                >
+                  <svg
+                    width="28"
+                    height="20"
+                    viewBox="0 0 30 22"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0 22V13.5C0 6 4.5 1 12 0L13 3.5C8 5 6 8 6 12H12V22H0ZM17 22V13.5C17 6 21.5 1 29 0L30 3.5C25 5 23 8 23 12H29V22H17Z"
+                      fill="#b241b7"
+                      opacity="0.5"
+                    />
+                  </svg>
+                  <p className="font-landing text-sm text-[#3f3a52] leading-relaxed flex-1">
+                    {s.quote}
+                  </p>
+                  <div className="pt-1.5 border-t border-[#e6e1ef]">
+                    <p className="font-landing text-[13.5px] font-semibold text-[#0f0f0f]">
+                      {s.name}
+                    </p>
+                    <p className="font-landing text-xs text-[#8a8598] mt-0.5">
+                      {s.detail}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
