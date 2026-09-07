@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import HubHeader from "../Components/HubHeader";
 import HubFooter from "../Components/HubFooter";
+import heroCollage from "../assets/hero_img.png";
 
 // PLACEHOLDER COPY — replace names / descriptions with the real ones.
 const programs = [
@@ -49,30 +50,36 @@ const Hub = () => {
 
       {/* Hero */}
       <div className="px-5 md:px-10 lg:px-16 pt-12 md:pt-20 pb-16 md:pb-24 bg-[#F7F7F7]">
-        <div className="max-w-3xl">
-          <Eyebrow>Global Outreach</Eyebrow>
-          <h1 className="font-display font-bold text-3xl md:text-5xl leading-tight mt-5">
-            Bringing genomics &amp; bioinformatics to{" "}
-            <span className="text-[#7ed003]">communities everywhere</span>
-          </h1>
-          <p className="font-landing text-sm md:text-lg text-[#4f4f4f] mt-5 leading-relaxed max-w-2xl">
-            {/* PLACEHOLDER — replace with the real mission statement. */}
-            The Global Outreach is a Genomac Holdings initiative running a growing
-            family of programs that make genomics and bioinformatics education
-            accessible — online, on campus, and through local hosts around the
-            world.
-          </p>
-          <div className="flex flex-wrap gap-3 mt-8">
-            <a href="#programs">
-              <button className="font-landing font-semibold text-white py-2.5 px-6 bg-linear-to-r from-[#b241b7] to-[#3d168b] rounded-full hover:-translate-y-0.5 transition text-sm cursor-pointer">
-                Explore Programs
-              </button>
-            </a>
-            <Link to="/host">
-              <button className="font-landing font-semibold text-[#3d168b] py-2.5 px-6 border border-[#3d168b] rounded-full hover:bg-[#3d168b] hover:text-white transition text-sm cursor-pointer">
-                Host a Program &rarr;
-              </button>
-            </Link>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12 max-w-6xl">
+          <div className="lg:w-7/12">
+            <Eyebrow>Global Outreach</Eyebrow>
+            <h1 className="font-display font-bold text-3xl md:text-5xl leading-tight mt-5">
+              Bringing genomics &amp; bioinformatics to{" "}
+              <span className="text-[#7ed003]">communities everywhere</span>
+            </h1>
+            <p className="font-landing text-sm md:text-lg text-[#4f4f4f] mt-5 leading-relaxed max-w-2xl">
+              {/* PLACEHOLDER — replace with the real mission statement. */}
+              The Global Outreach is a Genomac Holdings initiative running a
+              growing family of programs that make genomics and bioinformatics
+              education accessible — online, on campus, and through local hosts
+              around the world.
+            </p>
+            <div className="flex flex-wrap gap-3 mt-8">
+              <a href="#programs">
+                <button className="font-landing font-semibold text-white py-2.5 px-6 bg-linear-to-r from-[#b241b7] to-[#3d168b] rounded-full hover:-translate-y-0.5 transition text-sm cursor-pointer">
+                  Explore Programs
+                </button>
+              </a>
+              <Link to="/host">
+                <button className="font-landing font-semibold text-[#3d168b] py-2.5 px-6 border border-[#3d168b] rounded-full hover:bg-[#3d168b] hover:text-white transition text-sm cursor-pointer">
+                  Host a Program &rarr;
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="hidden lg:block lg:w-5/12">
+            <img src={heroCollage} alt="" className="w-full" />
           </div>
         </div>
       </div>
