@@ -397,29 +397,31 @@ const Hub = () => {
             experience with it.
           </p>
 
-          <p className="font-landing text-sm text-[#c9b8ec] mt-10 mb-4">
-            Depending on the program, participants may:
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-            {approachItems.map((item) => (
-              <div key={item} className="flex gap-3 items-start">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#a3e635"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-4 h-4 mt-1 shrink-0"
-                  aria-hidden="true"
-                >
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-                <span className="font-landing text-[13px] md:text-[15px] text-white">
-                  {item}
-                </span>
-              </div>
-            ))}
+          <div className="mt-10 rounded-2xl border border-white/25 bg-white/5 p-6 md:p-8">
+            <p className="font-landing text-sm text-[#c9b8ec] mb-4">
+              Depending on the program, participants may:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+              {approachItems.map((item) => (
+                <div key={item} className="flex gap-3 items-start">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#a3e635"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-4 h-4 mt-1 shrink-0"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span className="font-landing text-[13px] md:text-[15px] text-white">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <p className="font-display font-bold text-lg md:text-2xl mt-12">
