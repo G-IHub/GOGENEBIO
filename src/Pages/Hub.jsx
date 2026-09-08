@@ -386,7 +386,7 @@ const Hub = () => {
           <h2 className="font-display font-bold text-xl md:text-4xl mt-4">
             What Makes Our Outreach Different?
           </h2>
-          <p className="font-landing text-[13px] md:text-lg text-[#e6ddf5] leading-relaxed mt-5 max-w-3xl">
+          <p className="font-landing text-[13px] md:text-lg text-[#e6ddf5] leading-relaxed mt-5">
             We don&apos;t just tell people about science —{" "}
             <span className="text-[#a3e635] font-semibold">
               we let them experience it
