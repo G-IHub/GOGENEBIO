@@ -397,7 +397,7 @@ const Hub = () => {
             experience with it.
           </p>
 
-          <div className="mt-10 rounded-2xl border border-white/25 bg-white/5 p-6 md:p-8">
+          <div className="mt-10 rounded-2xl border-2 border-white/40 p-6 md:p-8">
             <p className="font-landing text-sm text-[#c9b8ec] mb-4">
               Depending on the program, participants may:
             </p>
