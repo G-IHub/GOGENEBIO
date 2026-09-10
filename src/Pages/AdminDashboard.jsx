@@ -72,6 +72,31 @@ const TABS = [
   { key: "testimonial_page", label: "Testimonial Page" },
 ];
 
+const FETCH_PAGE_SIZE = 1000;
+
+// Supabase/PostgREST caps an unpaginated select() at 1000 rows by default —
+// past that the response silently truncates instead of erroring, so counts
+// built from .length quietly freeze. Page through with .range() instead.
+const fetchAllRows = async (table) => {
+  let rows = [];
+  let from = 0;
+
+  while (true) {
+    const { data, error } = await supabase
+      .from(table)
+      .select("*")
+      .range(from, from + FETCH_PAGE_SIZE - 1);
+
+    if (error) return { data: null, error };
+
+    rows = rows.concat(data || []);
+    if (!data || data.length < FETCH_PAGE_SIZE) break;
+    from += FETCH_PAGE_SIZE;
+  }
+
+  return { data: rows, error: null };
+};
+
 const sortByCreatedAt = (rows) =>
   [...rows].sort((a, b) => {
     if (!a.created_at || !b.created_at) return 0;
@@ -194,9 +219,9 @@ const AdminDashboard = () => {
 
     const [regRes, testRes, hostRes, regionRes, promoRes, settingRes] =
       await Promise.all([
-        supabase.from("registrations").select("*"),
-        supabase.from("testimonials").select("*"),
-        supabase.from("host_applications").select("*"),
+        fetchAllRows("registrations"),
+        fetchAllRows("testimonials"),
+        fetchAllRows("host_applications"),
         supabase.from("regions").select("*"),
         supabase.from("promos").select("*"),
         supabase
