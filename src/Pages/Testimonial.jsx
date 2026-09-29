@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { Link } from "react-router-dom";
+import CertificatePreview from "../Components/CertificatePreview";
+import { downloadCanvas } from "../lib/certificate";
+
+const MIN_TESTIMONIAL_WORDS = 30;
+const wordCount = (s) => (s || "").trim().split(/\s+/).filter(Boolean).length;
 
 // Normalise whatever the admin typed into clean lines: strip zero-width /
 // non-breaking spaces, collapse repeated spaces, drop blank lines.
@@ -24,13 +29,17 @@ const Testimonial = () => {
   const [promos, setPromos] = useState([]);
   const [openPromo, setOpenPromo] = useState(null);
   const [redirectUrl, setRedirectUrl] = useState("");
+  const [certTemplate, setCertTemplate] = useState(null);
+  const [certReady, setCertReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+  const certCanvasRef = useRef(null);
+  const autoDownloadedRef = useRef(false);
 
   useEffect(() => {
     const load = async () => {
-      const [regRes, promoRes, settingRes] = await Promise.all([
+      const [regRes, promoRes, settingRes, certRes] = await Promise.all([
         supabase.from("regions").select("name").eq("active", true).order("name"),
         supabase
           .from("promos")
@@ -43,15 +52,30 @@ const Testimonial = () => {
           .select("value")
           .eq("key", "testimonial_redirect_url")
           .maybeSingle(),
+        supabase
+          .from("certificate_template")
+          .select("*")
+          .eq("id", "default")
+          .maybeSingle(),
       ]);
 
       if (!regRes.error && regRes.data) setRegions(regRes.data);
       if (!promoRes.error && promoRes.data) setPromos(promoRes.data);
       if (!settingRes.error && settingRes.data?.value)
         setRedirectUrl(settingRes.data.value);
+      if (!certRes.error && certRes.data) setCertTemplate(certRes.data);
     };
     load();
   }, []);
+
+  // Auto-download the certificate once it has finished drawing.
+  useEffect(() => {
+    if (done && certReady && !autoDownloadedRef.current) {
+      autoDownloadedRef.current = true;
+      const safeName = (form.name.trim() || "certificate").replace(/\s+/g, "-");
+      downloadCanvas(certCanvasRef.current, `GoGeneBio-Certificate-${safeName}.png`);
+    }
+  }, [done, certReady, form.name]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,8 +84,17 @@ const Testimonial = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+
+    const words = wordCount(form.testimonial);
+    if (words < MIN_TESTIMONIAL_WORDS) {
+      setError(
+        `Please write at least ${MIN_TESTIMONIAL_WORDS} words (currently ${words}).`
+      );
+      return;
+    }
+
+    setLoading(true);
 
     const { error: insErr } = await supabase.from("testimonials").insert([
       {
@@ -76,11 +109,6 @@ const Testimonial = () => {
     if (insErr) {
       setLoading(false);
       setError("Something went wrong: " + insErr.message);
-      return;
-    }
-
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
       return;
     }
 
@@ -233,8 +261,39 @@ const Testimonial = () => {
               <div className="space-y-3 text-center">
                 <h2 className="text-2xl font-bold">Thank you!</h2>
                 <p className="text-sm text-gray-600">
-                  Your testimonial has been received.
+                  Your testimonial has been received. Your certificate is
+                  ready below.
                 </p>
+                <CertificatePreview
+                  ref={certCanvasRef}
+                  template={certTemplate}
+                  name={form.name}
+                  onReady={() => setCertReady(true)}
+                  className="w-full rounded-lg border shadow"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const safeName =
+                      (form.name.trim() || "certificate").replace(/\s+/g, "-");
+                    downloadCanvas(
+                      certCanvasRef.current,
+                      `GoGeneBio-Certificate-${safeName}.png`
+                    );
+                  }}
+                  disabled={!certReady}
+                  className="w-full bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white p-3 cursor-pointer disabled:opacity-50"
+                >
+                  {certReady ? "Download Certificate" : "Preparing certificate..."}
+                </button>
+                {redirectUrl && (
+                  <a
+                    href={redirectUrl}
+                    className="block text-sm text-[#9D3CA7] underline"
+                  >
+                    Continue &rarr;
+                  </a>
+                )}
                 <Link
                   to="/gogenbio"
                   className="inline-block mt-2 text-sm text-[#9D3CA7] underline"
@@ -321,17 +380,29 @@ const Testimonial = () => {
                     <textarea
                       name="testimonial"
                       className="w-full border rounded-lg p-3 h-32 focus:outline-none"
-                      placeholder="Share your experience..."
+                      placeholder={`Share your experience... (minimum ${MIN_TESTIMONIAL_WORDS} words)`}
                       value={form.testimonial}
                       onChange={handleChange}
                       required
                     />
+                    <span
+                      className={`text-xs ${
+                        wordCount(form.testimonial) < MIN_TESTIMONIAL_WORDS
+                          ? "text-red-500"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {wordCount(form.testimonial)} / {MIN_TESTIMONIAL_WORDS} words
+                      minimum
+                    </span>
                   </label>
 
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white p-3 cursor-pointer"
+                    disabled={
+                      loading || wordCount(form.testimonial) < MIN_TESTIMONIAL_WORDS
+                    }
+                    className="w-full bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white p-3 cursor-pointer disabled:opacity-50"
                   >
                     {loading ? "Submitting..." : "Submit Testimonial"}
                   </button>

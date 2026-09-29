@@ -244,3 +244,57 @@ create policy "host_applications_insert_anon"
 create policy "host_applications_select_admin"
   on public.host_applications for select to authenticated
   using ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
+
+-- ============================================================
+-- certificate_template + certificate image bucket
+-- (see 010_certificate_template.sql)
+-- ============================================================
+create table if not exists public.certificate_template (
+  id text primary key default 'default',
+  title text,
+  program_name text,
+  body_text text,
+  background_url text,
+  signatory1_name text,
+  signatory1_title text,
+  signatory1_signature_url text,
+  signatory2_name text,
+  signatory2_title text,
+  signatory2_signature_url text,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.certificate_template enable row level security;
+
+create policy "certificate_template_select_public"
+  on public.certificate_template for select to anon, authenticated using (true);
+
+create policy "certificate_template_admin_write"
+  on public.certificate_template for all to authenticated
+  using ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' )
+  with check ( lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
+
+insert into public.certificate_template (id, title, program_name, body_text)
+values (
+  'default',
+  'Certificate of Participation',
+  'GoGeneBio Global Outreach',
+  'has successfully participated in the {program} program organized by Genomac Holdings.'
+)
+on conflict (id) do nothing;
+
+insert into storage.buckets (id, name, public)
+values ('certificates', 'certificates', true)
+on conflict (id) do nothing;
+
+create policy "certificates_storage_admin_insert"
+  on storage.objects for insert to authenticated
+  with check ( bucket_id = 'certificates' and lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
+
+create policy "certificates_storage_admin_update"
+  on storage.objects for update to authenticated
+  using ( bucket_id = 'certificates' and lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
+
+create policy "certificates_storage_admin_delete"
+  on storage.objects for delete to authenticated
+  using ( bucket_id = 'certificates' and lower(auth.jwt() ->> 'email') = 'genomachub@gmail.com' );
