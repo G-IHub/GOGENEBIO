@@ -337,6 +337,22 @@ const AdminDashboard = () => {
     return supabase.storage.from("promos").getPublicUrl(path).data.publicUrl;
   };
 
+  const linesToArray = (s) =>
+    (s || "")
+      .split("\n")
+      .map((x) => x.replace(/^[\s•\-*]+/, "").trim())
+      .filter(Boolean);
+
+  const cleanText = (s) =>
+    (s || "")
+      .replace(/\r\n/g, "\n")
+      .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, " ")
+      .split("\n")
+      .map((l) => l.replace(/\s+$/, "").replace(/\s{2,}/g, " ").trim())
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+
   const uploadCertAsset = async (file) => {
     const ext = (file.name.split(".").pop() || "png").toLowerCase();
     const path = `${crypto.randomUUID()}.${ext}`;
@@ -415,22 +431,6 @@ const AdminDashboard = () => {
     }),
     [certForm, certTemplate]
   );
-
-  const linesToArray = (s) =>
-    (s || "")
-      .split("\n")
-      .map((x) => x.replace(/^[\s•\-*]+/, "").trim())
-      .filter(Boolean);
-
-  const cleanText = (s) =>
-    (s || "")
-      .replace(/\r\n/g, "\n")
-      .replace(/[\u200B-\u200D\uFEFF\u00A0]/g, " ")
-      .split("\n")
-      .map((l) => l.replace(/\s+$/, "").replace(/\s{2,}/g, " ").trim())
-      .join("\n")
-      .replace(/\n{3,}/g, "\n\n")
-      .trim();
 
   const addPromo = async (e) => {
     e.preventDefault();
