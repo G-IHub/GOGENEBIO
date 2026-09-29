@@ -263,7 +263,9 @@ create table if not exists public.certificate_template (
   signatory2_signature_url text,
   updated_at timestamptz not null default now(),
   logo_url text,
-  topics text[] not null default '{}'
+  topics text[] not null default '{}',
+  accent_color text,
+  accent_color_2 text
 );
 
 alter table public.certificate_template enable row level security;

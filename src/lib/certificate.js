@@ -71,6 +71,8 @@ export async function drawCertificate(canvas, template, participantName) {
   const W = CERT_WIDTH;
   const H = CERT_HEIGHT;
   const name = (participantName || "").trim() || "Participant Name";
+  const accent = template?.accent_color || "#b241b7";
+  const accent2 = template?.accent_color_2 || "#3d168b";
 
   const [bg, sig1, sig2, logo] = await Promise.all([
     loadImage(template?.background_url),
@@ -94,10 +96,10 @@ export async function drawCertificate(canvas, template, participantName) {
   }
 
   // Decorative border
-  ctx.strokeStyle = "#b241b7";
+  ctx.strokeStyle = accent;
   ctx.lineWidth = 6;
   ctx.strokeRect(40, 40, W - 80, H - 80);
-  ctx.strokeStyle = "#3d168b";
+  ctx.strokeStyle = accent2;
   ctx.lineWidth = 2;
   ctx.strokeRect(56, 56, W - 112, H - 112);
 
@@ -112,7 +114,7 @@ export async function drawCertificate(canvas, template, participantName) {
     ctx.drawImage(logo, (W - lw) / 2, 55, lw, lh);
   }
 
-  ctx.fillStyle = "#3d168b";
+  ctx.fillStyle = accent2;
   ctx.font = "600 28px Georgia, serif";
   ctx.fillText(
     (template?.program_name || "GoGeneBio Global Outreach").toUpperCase(),
@@ -128,7 +130,7 @@ export async function drawCertificate(canvas, template, participantName) {
   ctx.font = "26px Georgia, serif";
   ctx.fillText("This is to certify that", W / 2, 350);
 
-  ctx.fillStyle = "#b241b7";
+  ctx.fillStyle = accent;
   ctx.font = "bold 72px Georgia, serif";
   ctx.fillText(name, W / 2, 440);
 
@@ -172,7 +174,7 @@ export async function drawCertificate(canvas, template, participantName) {
       const row = Math.floor(i / 2);
       const x = colX[col];
       const rowY = y + row * rowHeight;
-      ctx.fillStyle = "#b241b7";
+      ctx.fillStyle = accent;
       ctx.beginPath();
       ctx.arc(x, rowY - 7, 4, 0, Math.PI * 2);
       ctx.fill();
