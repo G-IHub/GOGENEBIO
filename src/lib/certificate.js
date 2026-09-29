@@ -2,6 +2,8 @@
 // fill in the template) and the participant download page after submitting a
 // testimonial, so what the admin sees is exactly what gets generated.
 
+import defaultLogo from "../assets/Logo.png";
+
 export const CERT_WIDTH = 1600;
 export const CERT_HEIGHT = 1130;
 
@@ -70,10 +72,11 @@ export async function drawCertificate(canvas, template, participantName) {
   const H = CERT_HEIGHT;
   const name = (participantName || "").trim() || "Participant Name";
 
-  const [bg, sig1, sig2] = await Promise.all([
+  const [bg, sig1, sig2, logo] = await Promise.all([
     loadImage(template?.background_url),
     loadImage(template?.signatory1_signature_url),
     loadImage(template?.signatory2_signature_url),
+    loadImage(template?.logo_url || defaultLogo),
   ]);
 
   // Background
@@ -100,32 +103,41 @@ export async function drawCertificate(canvas, template, participantName) {
 
   ctx.textAlign = "center";
 
+  // Logo (defaults to the Genomac Holdings logo bundled with the app)
+  if (logo) {
+    const maxLogoH = 85;
+    const scale = Math.min(maxLogoH / logo.height, 85 / logo.width);
+    const lw = logo.width * scale;
+    const lh = logo.height * scale;
+    ctx.drawImage(logo, (W - lw) / 2, 55, lw, lh);
+  }
+
   ctx.fillStyle = "#3d168b";
   ctx.font = "600 28px Georgia, serif";
   ctx.fillText(
     (template?.program_name || "GoGeneBio Global Outreach").toUpperCase(),
     W / 2,
-    170
+    195
   );
 
   ctx.fillStyle = "#0f0f0f";
   ctx.font = "bold 64px Georgia, serif";
-  ctx.fillText(template?.title || "Certificate of Participation", W / 2, 250);
+  ctx.fillText(template?.title || "Certificate of Participation", W / 2, 275);
 
   ctx.fillStyle = "#55506b";
   ctx.font = "26px Georgia, serif";
-  ctx.fillText("This is to certify that", W / 2, 340);
+  ctx.fillText("This is to certify that", W / 2, 350);
 
   ctx.fillStyle = "#b241b7";
   ctx.font = "bold 72px Georgia, serif";
-  ctx.fillText(name, W / 2, 430);
+  ctx.fillText(name, W / 2, 440);
 
   const nameWidth = Math.min(ctx.measureText(name).width + 60, W - 300);
   ctx.strokeStyle = "#e0cff2";
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(W / 2 - nameWidth / 2, 455);
-  ctx.lineTo(W / 2 + nameWidth / 2, 455);
+  ctx.moveTo(W / 2 - nameWidth / 2, 465);
+  ctx.lineTo(W / 2 + nameWidth / 2, 465);
   ctx.stroke();
 
   ctx.fillStyle = "#3f3a52";
@@ -136,11 +148,41 @@ export async function drawCertificate(canvas, template, participantName) {
   )
     .replace(/{name}/g, name)
     .replace(/{program}/g, template?.program_name || "GoGeneBio Global Outreach");
-  let y = 520;
+  let y = 530;
   wrapLines(ctx, body, W - 400).forEach((line) => {
     ctx.fillText(line, W / 2, y);
     y += 40;
   });
+
+  // Program covered — short list of topics, set by the admin.
+  const topics = (template?.topics || []).filter(Boolean);
+  if (topics.length > 0) {
+    y += 30;
+    ctx.fillStyle = "#8a8598";
+    ctx.font = "600 20px Georgia, serif";
+    ctx.fillText("PROGRAM COVERED", W / 2, y);
+    y += 34;
+
+    ctx.font = "24px Georgia, serif";
+    const colX = [W * 0.28, W * 0.56];
+    const colWidth = W * 0.26;
+    const rowHeight = 34;
+    topics.forEach((topic, i) => {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const x = colX[col];
+      const rowY = y + row * rowHeight;
+      ctx.fillStyle = "#b241b7";
+      ctx.beginPath();
+      ctx.arc(x, rowY - 7, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#3f3a52";
+      ctx.textAlign = "left";
+      const [firstLine] = wrapLines(ctx, topic, colWidth);
+      ctx.fillText(firstLine, x + 16, rowY);
+      ctx.textAlign = "center";
+    });
+  }
 
   const sigY = H - 190;
   if (template?.signatory2_name || sig2) {

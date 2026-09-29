@@ -222,6 +222,8 @@ const AdminDashboard = () => {
     program_name: "",
     body_text: "",
     bg_file: null,
+    logo_file: null,
+    topics: "",
     sig1_name: "",
     sig1_title: "",
     sig1_file: null,
@@ -295,6 +297,7 @@ const AdminDashboard = () => {
         title: certRes.data.title || "",
         program_name: certRes.data.program_name || "",
         body_text: certRes.data.body_text || "",
+        topics: (certRes.data.topics || []).join("\n"),
         sig1_name: certRes.data.signatory1_name || "",
         sig1_title: certRes.data.signatory1_title || "",
         sig2_name: certRes.data.signatory2_name || "",
@@ -357,9 +360,11 @@ const AdminDashboard = () => {
         signatory1_title: certForm.sig1_title.trim() || null,
         signatory2_name: certForm.sig2_name.trim() || null,
         signatory2_title: certForm.sig2_title.trim() || null,
+        topics: linesToArray(certForm.topics),
         updated_at: new Date().toISOString(),
       };
       if (certForm.bg_file) patch.background_url = await uploadCertAsset(certForm.bg_file);
+      if (certForm.logo_file) patch.logo_url = await uploadCertAsset(certForm.logo_file);
       if (certForm.sig1_file)
         patch.signatory1_signature_url = await uploadCertAsset(certForm.sig1_file);
       if (certForm.sig2_file)
@@ -370,7 +375,13 @@ const AdminDashboard = () => {
         .upsert(patch, { onConflict: "id" });
       if (upErr) throw upErr;
 
-      setCertForm((f) => ({ ...f, bg_file: null, sig1_file: null, sig2_file: null }));
+      setCertForm((f) => ({
+        ...f,
+        bg_file: null,
+        logo_file: null,
+        sig1_file: null,
+        sig2_file: null,
+      }));
       setCertSaved(true);
       await fetchData();
     } catch (err) {
@@ -387,6 +398,10 @@ const AdminDashboard = () => {
       background_url: certForm.bg_file
         ? URL.createObjectURL(certForm.bg_file)
         : certTemplate?.background_url,
+      logo_url: certForm.logo_file
+        ? URL.createObjectURL(certForm.logo_file)
+        : certTemplate?.logo_url,
+      topics: linesToArray(certForm.topics),
       signatory1_name: certForm.sig1_name,
       signatory1_title: certForm.sig1_title,
       signatory1_signature_url: certForm.sig1_file
@@ -1354,6 +1369,20 @@ const AdminDashboard = () => {
               </div>
               <div>
                 <label className="text-xs text-gray-500">
+                  Program covered — one topic per line (optional)
+                </label>
+                <textarea
+                  className="border rounded-lg p-2 w-full h-24 focus:outline-none"
+                  value={certForm.topics}
+                  onChange={(e) => {
+                    setCertForm((f) => ({ ...f, topics: e.target.value }));
+                    setCertSaved(false);
+                  }}
+                  placeholder={"Genomics fundamentals\nSequence analysis\nHands-on bioinformatics tools"}
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500">
                   Background image (optional)
                 </label>
                 <ImageDrop
@@ -1361,6 +1390,19 @@ const AdminDashboard = () => {
                   imageUrl={certTemplate?.background_url}
                   onFile={(f) => {
                     setCertForm((x) => ({ ...x, bg_file: f }));
+                    setCertSaved(false);
+                  }}
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500">
+                  Logo (optional — defaults to the Genomac Holdings logo)
+                </label>
+                <ImageDrop
+                  file={certForm.logo_file}
+                  imageUrl={certTemplate?.logo_url}
+                  onFile={(f) => {
+                    setCertForm((x) => ({ ...x, logo_file: f }));
                     setCertSaved(false);
                   }}
                 />
