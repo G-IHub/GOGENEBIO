@@ -224,6 +224,8 @@ const AdminDashboard = () => {
     bg_file: null,
     logo_file: null,
     topics: "",
+    accent_color: "#b241b7",
+    accent_color_2: "#3d168b",
     sig1_name: "",
     sig1_title: "",
     sig1_file: null,
@@ -298,6 +300,8 @@ const AdminDashboard = () => {
         program_name: certRes.data.program_name || "",
         body_text: certRes.data.body_text || "",
         topics: (certRes.data.topics || []).join("\n"),
+        accent_color: certRes.data.accent_color || "#b241b7",
+        accent_color_2: certRes.data.accent_color_2 || "#3d168b",
         sig1_name: certRes.data.signatory1_name || "",
         sig1_title: certRes.data.signatory1_title || "",
         sig2_name: certRes.data.signatory2_name || "",
@@ -377,6 +381,8 @@ const AdminDashboard = () => {
         signatory2_name: certForm.sig2_name.trim() || null,
         signatory2_title: certForm.sig2_title.trim() || null,
         topics: linesToArray(certForm.topics),
+        accent_color: certForm.accent_color || null,
+        accent_color_2: certForm.accent_color_2 || null,
         updated_at: new Date().toISOString(),
       };
       if (certForm.bg_file) patch.background_url = await uploadCertAsset(certForm.bg_file);
@@ -418,6 +424,8 @@ const AdminDashboard = () => {
         ? URL.createObjectURL(certForm.logo_file)
         : certTemplate?.logo_url,
       topics: linesToArray(certForm.topics),
+      accent_color: certForm.accent_color,
+      accent_color_2: certForm.accent_color_2,
       signatory1_name: certForm.sig1_name,
       signatory1_title: certForm.sig1_title,
       signatory1_signature_url: certForm.sig1_file
@@ -1406,6 +1414,37 @@ const AdminDashboard = () => {
                     setCertSaved(false);
                   }}
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Border, name &amp; bullet colour
+                  </label>
+                  <input
+                    type="color"
+                    className="w-full h-10 border rounded-lg cursor-pointer"
+                    value={certForm.accent_color}
+                    onChange={(e) => {
+                      setCertForm((f) => ({ ...f, accent_color: e.target.value }));
+                      setCertSaved(false);
+                    }}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Inner border &amp; program name colour
+                  </label>
+                  <input
+                    type="color"
+                    className="w-full h-10 border rounded-lg cursor-pointer"
+                    value={certForm.accent_color_2}
+                    onChange={(e) => {
+                      setCertForm((f) => ({ ...f, accent_color_2: e.target.value }));
+                      setCertSaved(false);
+                    }}
+                  />
+                </div>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4 pt-4 border-t">
