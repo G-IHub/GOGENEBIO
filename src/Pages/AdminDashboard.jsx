@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
+import CertificatePreview from "../Components/CertificatePreview";
 
 const ImageDrop = ({ file, imageUrl, onFile }) => {
   const inputRef = useRef(null);
@@ -70,6 +71,7 @@ const TABS = [
   { key: "hosts", label: "Host Applications" },
   { key: "regions", label: "Regions" },
   { key: "testimonial_page", label: "Testimonial Page" },
+  { key: "certificate", label: "Certificate" },
 ];
 
 const FETCH_PAGE_SIZE = 1000;
@@ -213,11 +215,29 @@ const AdminDashboard = () => {
   const [promoEdits, setPromoEdits] = useState({});
   const [promoBusy, setPromoBusy] = useState(false);
 
+  // Certificate tab UI state
+  const [certTemplate, setCertTemplate] = useState(null);
+  const [certForm, setCertForm] = useState({
+    title: "",
+    program_name: "",
+    body_text: "",
+    bg_file: null,
+    sig1_name: "",
+    sig1_title: "",
+    sig1_file: null,
+    sig2_name: "",
+    sig2_title: "",
+    sig2_file: null,
+  });
+  const [certPreviewName, setCertPreviewName] = useState("Jane Doe");
+  const [certBusy, setCertBusy] = useState(false);
+  const [certSaved, setCertSaved] = useState(true);
+
   const fetchData = async () => {
     setLoading(true);
     setError("");
 
-    const [regRes, testRes, hostRes, regionRes, promoRes, settingRes] =
+    const [regRes, testRes, hostRes, regionRes, promoRes, settingRes, certRes] =
       await Promise.all([
         fetchAllRows("registrations"),
         fetchAllRows("testimonials"),
@@ -228,6 +248,11 @@ const AdminDashboard = () => {
           .from("app_settings")
           .select("value")
           .eq("key", "testimonial_redirect_url")
+          .maybeSingle(),
+        supabase
+          .from("certificate_template")
+          .select("*")
+          .eq("id", "default")
           .maybeSingle(),
       ]);
 
@@ -263,6 +288,21 @@ const AdminDashboard = () => {
       setRedirectSaved(true);
     }
 
+    if (!certRes.error && certRes.data) {
+      setCertTemplate(certRes.data);
+      setCertForm((f) => ({
+        ...f,
+        title: certRes.data.title || "",
+        program_name: certRes.data.program_name || "",
+        body_text: certRes.data.body_text || "",
+        sig1_name: certRes.data.signatory1_name || "",
+        sig1_title: certRes.data.signatory1_title || "",
+        sig2_name: certRes.data.signatory2_name || "",
+        sig2_title: certRes.data.signatory2_title || "",
+      }));
+      setCertSaved(true);
+    }
+
     setLoading(false);
   };
 
@@ -293,6 +333,73 @@ const AdminDashboard = () => {
     if (upErr) throw upErr;
     return supabase.storage.from("promos").getPublicUrl(path).data.publicUrl;
   };
+
+  const uploadCertAsset = async (file) => {
+    const ext = (file.name.split(".").pop() || "png").toLowerCase();
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("certificates")
+      .upload(path, file, { upsert: false });
+    if (upErr) throw upErr;
+    return supabase.storage.from("certificates").getPublicUrl(path).data.publicUrl;
+  };
+
+  const saveCertTemplate = async () => {
+    setCertBusy(true);
+    setError("");
+    try {
+      const patch = {
+        id: "default",
+        title: certForm.title.trim() || null,
+        program_name: certForm.program_name.trim() || null,
+        body_text: certForm.body_text.trim() || null,
+        signatory1_name: certForm.sig1_name.trim() || null,
+        signatory1_title: certForm.sig1_title.trim() || null,
+        signatory2_name: certForm.sig2_name.trim() || null,
+        signatory2_title: certForm.sig2_title.trim() || null,
+        updated_at: new Date().toISOString(),
+      };
+      if (certForm.bg_file) patch.background_url = await uploadCertAsset(certForm.bg_file);
+      if (certForm.sig1_file)
+        patch.signatory1_signature_url = await uploadCertAsset(certForm.sig1_file);
+      if (certForm.sig2_file)
+        patch.signatory2_signature_url = await uploadCertAsset(certForm.sig2_file);
+
+      const { error: upErr } = await supabase
+        .from("certificate_template")
+        .upsert(patch, { onConflict: "id" });
+      if (upErr) throw upErr;
+
+      setCertForm((f) => ({ ...f, bg_file: null, sig1_file: null, sig2_file: null }));
+      setCertSaved(true);
+      await fetchData();
+    } catch (err) {
+      setError(err.message || String(err));
+    }
+    setCertBusy(false);
+  };
+
+  const certPreviewTemplate = useMemo(
+    () => ({
+      title: certForm.title,
+      program_name: certForm.program_name,
+      body_text: certForm.body_text,
+      background_url: certForm.bg_file
+        ? URL.createObjectURL(certForm.bg_file)
+        : certTemplate?.background_url,
+      signatory1_name: certForm.sig1_name,
+      signatory1_title: certForm.sig1_title,
+      signatory1_signature_url: certForm.sig1_file
+        ? URL.createObjectURL(certForm.sig1_file)
+        : certTemplate?.signatory1_signature_url,
+      signatory2_name: certForm.sig2_name,
+      signatory2_title: certForm.sig2_title,
+      signatory2_signature_url: certForm.sig2_file
+        ? URL.createObjectURL(certForm.sig2_file)
+        : certTemplate?.signatory2_signature_url,
+    }),
+    [certForm, certTemplate]
+  );
 
   const linesToArray = (s) =>
     (s || "")
@@ -920,7 +1027,7 @@ const AdminDashboard = () => {
             after registering.
           </p>
         </div>
-      ) : (
+      ) : activeTab === "testimonial_page" ? (
         <div className="space-y-8">
           <div className="bg-white rounded-lg shadow p-4">
             <h3 className="font-semibold mb-1">After-submit redirect link</h3>
@@ -1192,6 +1299,163 @@ const AdminDashboard = () => {
               {promos.length === 0 && (
                 <p className="text-sm text-gray-500">No cards yet.</p>
               )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-semibold mb-1">Certificate Template</h3>
+            <p className="text-xs text-gray-500">
+              Fill this in once — every testimonial submitter gets a
+              certificate generated from it automatically, with their own
+              name filled in.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-6">
+            <div className="space-y-4 bg-white rounded-lg shadow p-4">
+              <div>
+                <label className="text-xs text-gray-500">Title</label>
+                <input
+                  className="border rounded-lg p-2 w-full focus:outline-none"
+                  value={certForm.title}
+                  onChange={(e) => {
+                    setCertForm((f) => ({ ...f, title: e.target.value }));
+                    setCertSaved(false);
+                  }}
+                  placeholder="Certificate of Participation"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500">Program name</label>
+                <input
+                  className="border rounded-lg p-2 w-full focus:outline-none"
+                  value={certForm.program_name}
+                  onChange={(e) => {
+                    setCertForm((f) => ({ ...f, program_name: e.target.value }));
+                    setCertSaved(false);
+                  }}
+                  placeholder="GoGeneBio Global Outreach"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500">
+                  Body text — use {"{name}"} and {"{program}"} as placeholders
+                </label>
+                <textarea
+                  className="border rounded-lg p-2 w-full h-24 focus:outline-none"
+                  value={certForm.body_text}
+                  onChange={(e) => {
+                    setCertForm((f) => ({ ...f, body_text: e.target.value }));
+                    setCertSaved(false);
+                  }}
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500">
+                  Background image (optional)
+                </label>
+                <ImageDrop
+                  file={certForm.bg_file}
+                  imageUrl={certTemplate?.background_url}
+                  onFile={(f) => {
+                    setCertForm((x) => ({ ...x, bg_file: f }));
+                    setCertSaved(false);
+                  }}
+                />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4 pt-4 border-t">
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-gray-600">
+                    Signatory 1
+                  </p>
+                  <input
+                    className="border rounded-lg p-2 w-full text-sm focus:outline-none"
+                    placeholder="Name"
+                    value={certForm.sig1_name}
+                    onChange={(e) => {
+                      setCertForm((f) => ({ ...f, sig1_name: e.target.value }));
+                      setCertSaved(false);
+                    }}
+                  />
+                  <input
+                    className="border rounded-lg p-2 w-full text-sm focus:outline-none"
+                    placeholder="Title (e.g. Program Director)"
+                    value={certForm.sig1_title}
+                    onChange={(e) => {
+                      setCertForm((f) => ({ ...f, sig1_title: e.target.value }));
+                      setCertSaved(false);
+                    }}
+                  />
+                  <ImageDrop
+                    file={certForm.sig1_file}
+                    imageUrl={certTemplate?.signatory1_signature_url}
+                    onFile={(f) => {
+                      setCertForm((x) => ({ ...x, sig1_file: f }));
+                      setCertSaved(false);
+                    }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-gray-600">
+                    Signatory 2 (optional)
+                  </p>
+                  <input
+                    className="border rounded-lg p-2 w-full text-sm focus:outline-none"
+                    placeholder="Name"
+                    value={certForm.sig2_name}
+                    onChange={(e) => {
+                      setCertForm((f) => ({ ...f, sig2_name: e.target.value }));
+                      setCertSaved(false);
+                    }}
+                  />
+                  <input
+                    className="border rounded-lg p-2 w-full text-sm focus:outline-none"
+                    placeholder="Title"
+                    value={certForm.sig2_title}
+                    onChange={(e) => {
+                      setCertForm((f) => ({ ...f, sig2_title: e.target.value }));
+                      setCertSaved(false);
+                    }}
+                  />
+                  <ImageDrop
+                    file={certForm.sig2_file}
+                    imageUrl={certTemplate?.signatory2_signature_url}
+                    onFile={(f) => {
+                      setCertForm((x) => ({ ...x, sig2_file: f }));
+                      setCertSaved(false);
+                    }}
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={saveCertTemplate}
+                disabled={certBusy || certSaved}
+                className="w-full bg-gradient-to-r from-[#511E8C] to-[#9D3CA7] rounded-lg text-white p-2.5 cursor-pointer disabled:opacity-40"
+              >
+                {certSaved ? "Saved" : certBusy ? "Saving..." : "Save Template"}
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs text-gray-500">Preview name</label>
+              <input
+                className="border rounded-lg p-2 w-full text-sm mb-2 focus:outline-none"
+                value={certPreviewName}
+                onChange={(e) => setCertPreviewName(e.target.value)}
+              />
+              <CertificatePreview
+                template={certPreviewTemplate}
+                name={certPreviewName}
+                className="w-full rounded-lg border shadow"
+              />
+              <p className="text-xs text-gray-500">
+                Live preview — updates as you type. This is exactly what a
+                participant will download after submitting a testimonial.
+              </p>
             </div>
           </div>
         </div>
