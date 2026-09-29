@@ -186,15 +186,12 @@ export async function drawCertificate(canvas, template, participantName) {
     });
   }
 
-  const sigY = H - 190;
-  if (template?.signatory2_name || sig2) {
-    drawSignatory(ctx, W * 0.28, sigY, template?.signatory1_name, template?.signatory1_title, sig1);
-    drawSignatory(ctx, W * 0.72, sigY, template?.signatory2_name, template?.signatory2_title, sig2);
-  } else {
-    drawSignatory(ctx, W / 2, sigY, template?.signatory1_name, template?.signatory1_title, sig1);
-  }
-
-  ctx.textAlign = "right";
+  // Issue date — centered, between the program-covered list and the
+  // signature block (moved off the bottom-right corner per admin feedback).
+  const topicRows = topics.length > 0 ? Math.ceil(topics.length / 2) : 0;
+  const topicsEndY = y + topicRows * 34;
+  const dateY = Math.min(topicsEndY + 50, H - 260);
+  ctx.textAlign = "center";
   ctx.fillStyle = "#8a8598";
   ctx.font = "20px Georgia, serif";
   const dateStr = new Date().toLocaleDateString(undefined, {
@@ -202,7 +199,15 @@ export async function drawCertificate(canvas, template, participantName) {
     month: "long",
     day: "numeric",
   });
-  ctx.fillText(`Issued ${dateStr}`, W - 90, H - 60);
+  ctx.fillText(`Issued ${dateStr}`, W / 2, dateY);
+
+  const sigY = H - 190;
+  if (template?.signatory2_name || sig2) {
+    drawSignatory(ctx, W * 0.28, sigY, template?.signatory1_name, template?.signatory1_title, sig1);
+    drawSignatory(ctx, W * 0.72, sigY, template?.signatory2_name, template?.signatory2_title, sig2);
+  } else {
+    drawSignatory(ctx, W / 2, sigY, template?.signatory1_name, template?.signatory1_title, sig1);
+  }
 }
 
 /** Triggers a PNG download of the canvas's current contents. */
